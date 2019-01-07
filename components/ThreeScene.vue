@@ -80,23 +80,26 @@ export default {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
       if(this.$store.state.rotateCube){
-        this.accelerateCube += 0.01 * delta;
+        this.accelerateCube += 0.1 * delta;
         this.mesh.rotation.x += this.accelerateCube;
         this.mesh.rotation.y += this.accelerateCube;
-        if(this.accelerateCube > 0.2){
+
+        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
+        if(this.accelerateCube > 1.0){
           this.$store.commit('setRotateCube', false);
-          this.accelerateCube = 0.01;
         }
       } else {
         if(this.accelerateCube > 0.01) {
-          this.accelerateCube -= 0.01 * delta;
+          this.accelerateCube -= 0.1 * delta;
         }
         this.mesh.rotation.x += this.accelerateCube;
         this.mesh.rotation.y += this.accelerateCube;
+
+        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
       }
 
-      this.pointsSystem.rotation.y -= 0.001
-      this.pointsSystem.rotation.x += 0.001
+      this.pointsSystem.rotation.y -= 0.001;
+
       // this.pointsSystem.material.opacity -= 0.01
 
       this.controls.update();
