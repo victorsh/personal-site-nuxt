@@ -6,7 +6,7 @@
         Victor Shahbazian
       </h2>
       <h5 class="subtitle">
-        Exploring an endless <code>void</code> of computation possibilities
+        exploring an endless <code>void</code> of computational possibilities
       </h5>
       <button type="button" class="btn btn-success" @click.prevent="updateCube">RT</button>
     </div>
