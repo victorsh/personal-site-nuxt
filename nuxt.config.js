@@ -33,6 +33,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    { src: '~plugins/ga.js', ssr: false }
   ],
 
   /*
@@ -42,10 +43,7 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/axios-module#usage
     '@nuxtjs/axios',
     // Doc: https://bootstrap-vue.js.org/docs/
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/google-analytics', {
-      id: 'UA-36377247-2'
-    }
+    'bootstrap-vue/nuxt'
   ],
   /*
   ** Axios module configuration
