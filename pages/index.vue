@@ -1,23 +1,24 @@
 <template>
   <section class="container">
     <three-scene/>
+    
     <div id='main'>
-      <h2 class="title pulsate">
+      <h2 class="title pulsate noselect">
         Victor Shahbazian
       </h2>
-      <h5 class="subtitle">
+      <h5 class="subtitle noselect">
         exploring an endless <code>void</code> of computational possibilities
       </h5>
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">RT</button>
+      <button type="button" class="btn btn-success" @click.prevent="updateCube">></button>
     </div>
-      <div class="links fixed-bottom">
-        <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
-          <button type="button" class="btn btn-outline-success">Linkedin</button>
-        </a>
-        <a href="https://github.com/victorsh" target="_blank">
-          <button type="button" class="btn btn-outline-info">Github</button>
-        </a>
-      </div>
+    <div class="links fixed-bottom">
+      <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
+        <button type="button" class="btn btn-outline-success">Linkedin</button>
+      </a>
+      <a href="https://github.com/victorsh" target="_blank">
+        <button type="button" class="btn btn-outline-info">Github</button>
+      </a>
+    </div>
   </section>
 </template>
 
@@ -103,6 +104,16 @@ export default {
   color: #fff9e5;
   word-spacing: 5px;
   padding-bottom: 15px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 
 .links {

@@ -62,8 +62,15 @@ export default {
         point.z = Three.Math.randFloatSpread(100)
         this.pointsGeometry.vertices.push(point)
       }
-      this.pointsMaterial = new Three.PointsMaterial({color: 0xFFFFFF, trasparent: true})
+      this.pointsMaterial = new Three.PointsMaterial({
+        color: 0xFFFFFF, map: Three.ImageUtils.loadTexture(
+          "/particle.png"
+        ),
+        blending: Three.AdditiveBlending,
+        transparent: true
+      })
       this.pointsSystem = new Three.Points(this.pointsGeometry, this.pointsMaterial)
+      this.pointsSystem.sortParticles = true;
       this.scene.add(this.pointsSystem)
 
       // let geometry = new Three.BoxGeometry(2, 2, 2);
