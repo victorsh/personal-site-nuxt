@@ -1,7 +1,8 @@
 <template>
   <section class="container">
-    <three-scene/>
-    
+    <three-scene v-if="threedState == 'start'"/>
+    <three-game v-if="threedState == 'game'"/>
+
     <div id='main'>
       <h2 class="title pulsate noselect">
         Victor Shahbazian
@@ -24,11 +25,18 @@
 
 <script>
 import ThreeScene from '~/components/ThreeScene.vue'
+import ThreeGame from '~/components/ThreeGame.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
-    ThreeScene
+    ThreeScene,
+    ThreeGame
+  },
+  data() {
+    return {
+      threedState: 'game'
+    }
   },
   computed: {
     ...mapState([

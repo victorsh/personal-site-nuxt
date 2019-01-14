@@ -18,9 +18,7 @@ export default {
       clock: null,
       controls: null,
       mesh: null,
-      pointsSystem: null,
       light: null,
-      accelerateCube: 0.01
     }
   },
   computed: {
@@ -54,25 +52,6 @@ export default {
       this.light = new Three.DirectionalLight(0xFFFFFF);
       this.scene.add(this.light);
 
-      this.pointsGeometry = new Three.Geometry()
-      for(let i = 0; i<1000; i++){
-        var point = new Three.Vector3()
-        point.x = Three.Math.randFloatSpread(100)
-        point.y = Three.Math.randFloatSpread(100)
-        point.z = Three.Math.randFloatSpread(100)
-        this.pointsGeometry.vertices.push(point)
-      }
-      this.pointsMaterial = new Three.PointsMaterial({
-        color: 0xFFFFFF, map: Three.ImageUtils.loadTexture(
-          "/particle.png"
-        ),
-        blending: Three.AdditiveBlending,
-        transparent: true
-      })
-      this.pointsSystem = new Three.Points(this.pointsGeometry, this.pointsMaterial)
-      this.pointsSystem.sortParticles = true;
-      this.scene.add(this.pointsSystem)
-
       // let geometry = new Three.BoxGeometry(2, 2, 2);
       let geometry = new Three.OctahedronBufferGeometry(2, 0);
       let material = new Three.MeshPhongMaterial({color: '#00d0ff'});
@@ -86,28 +65,9 @@ export default {
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
-      if(this.$store.state.rotateCube){
-        this.accelerateCube += 0.1 * delta;
-        this.mesh.rotation.x += this.accelerateCube;
-        this.mesh.rotation.y += this.accelerateCube;
 
-        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
-        if(this.accelerateCube > 1.0){
-          this.$store.commit('setRotateCube', false);
-        }
-      } else {
-        if(this.accelerateCube > 0.01) {
-          this.accelerateCube -= 0.1 * delta;
-        }
-        this.mesh.rotation.x += this.accelerateCube;
-        this.mesh.rotation.y += this.accelerateCube;
-
-        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
-      }
-
-      this.pointsSystem.rotation.y -= 0.001;
-
-      // this.pointsSystem.material.opacity -= 0.01
+      this.mesh.rotation.x += 0.1 * delta;
+      this.mesh.rotation.y += 0.1 * delta;
 
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
