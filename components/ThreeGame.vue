@@ -1,15 +1,15 @@
 <template>
-    <div id="three-container">
-    </div>
+  <div id="three-container"></div>
 </template>
 
 <script>
 import * as Three from 'three'
+import * as game from './game/game'
 import OrbitControls from 'orbit-controls-es6'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  name: 'ThreeScene',
+  name: 'ThreeGame',
   data() {
     return {
       camera: null,
@@ -30,7 +30,7 @@ export default {
     ])
   },
   created: function(){
-    console.log(this.rotateCube);
+    game.test();
   },
   methods: {
     init: function() {
@@ -49,6 +49,16 @@ export default {
 
       this.scene = new Three.Scene();
 
+      game.initObjects(this.scene);
+
+      container.appendChild(this.renderer.domElement);
+      window.addEventListener( 'resize', this.onWindowResize.bind(this), false);
+      window.addEventListener('keyup', function(e) { console.log(e)}, false);
+      window.addEventListener('mouseup', function(e) { console.log(e)}, false);
+      window.addEventListener('touchstart', function(e) { console.log(e)}, false);
+
+    },
+    initializeObjects: function() {
       this.light = new Three.DirectionalLight(0xFFFFFF);
       this.scene.add(this.light);
 
@@ -57,17 +67,13 @@ export default {
       let material = new Three.MeshPhongMaterial({color: '#00d0ff'});
       this.mesh = new Three.Mesh(geometry, material);
       this.scene.add(this.mesh);
-
-      container.appendChild(this.renderer.domElement);
-      window.addEventListener( 'resize', this.onWindowResize.bind(this), false)
-
     },
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
 
-      this.mesh.rotation.x += 0.1 * delta;
-      this.mesh.rotation.y += 0.1 * delta;
+      this.scene.getObjectByName("octahedron").rotation.x += 0.1 * delta;
+      this.scene.getObjectByName("octahedron").rotation.y += 0.1 * delta;
 
       this.controls.update();
       this.renderer.render(this.scene, this.camera);

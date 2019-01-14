@@ -1,6 +1,6 @@
 <template>
-    <div id="three-container">
-    </div>
+  <div id="three-container">
+  </div>
 </template>
 
 <script>
@@ -32,7 +32,6 @@ export default {
     ])
   },
   created: function(){
-    console.log(this.rotateCube);
   },
   methods: {
     init: function() {

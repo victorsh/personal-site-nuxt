@@ -1,39 +1,16 @@
 <template>
   <section class="container">
-    <nav-links/>
-    <three-scene/>
-    
-    <div id='main'>
-      <h2 class="title pulsate noselect">
-        Victor Shahbazian
-      </h2>
-      <h5 class="subtitle noselect">
-        exploring an endless <code>void</code> of computational possibilities
-      </h5>
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">></button>
-    </div>
-    
-    <div class="links fixed-bottom">
-      <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
-        <button type="button" class="btn btn-outline-success">Linkedin</button>
-      </a>
-      <a href="https://github.com/victorsh" target="_blank">
-        <button type="button" class="btn btn-outline-info">Github</button>
-      </a>
-    </div>
-
+    <three-game/>
   </section>
 </template>
 
 <script>
-import ThreeScene from '~/components/ThreeScene.vue'
-import NavLinks from '~/components/NavLinks.vue'
+import ThreeGame from '~/components/ThreeGame.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
-    ThreeScene,
-    NavLinks
+    ThreeGame
   },
   data() {
     return {
@@ -63,6 +40,11 @@ export default {
 
 <style>
 #main {
+  position: relative;
+  z-index: 1;
+}
+
+#navi{
   position: relative;
   z-index: 1;
 }
