@@ -1,16 +1,19 @@
 <template>
   <section class="container">
     <three-game/>
+    <nav-links/>
   </section>
 </template>
 
 <script>
 import ThreeGame from '~/components/ThreeGame.vue'
+import NavLinks from '~/components/NavLinks.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
-    ThreeGame
+    ThreeGame,
+    NavLinks
   },
   data() {
     return {

@@ -33,6 +33,13 @@ export default {
   },
   created: function(){
   },
+  mounted() {
+    this.init();
+    this.animate();
+  },
+  destroyed: function() {
+    document.removeEventListener('resize', this.onWindowResize, false);
+  },
   methods: {
     init: function() {
       let container = document.getElementById('three-container');
@@ -49,6 +56,22 @@ export default {
       this.controls.update()
 
       this.scene = new Three.Scene();
+
+      // Loading
+      this.loadingManagerThree = new Three.LoadingManager(() => {
+        console.log('loading');
+      });
+      this.loader = new Three.ImageLoader();
+      this.loader.load(
+        '/particle.png',
+        function (image) {
+          console.log('loaded');
+        },
+        undefined,
+        function () {
+          console.error('An error has occurred loading the particle image');
+        }
+      )
 
       this.light = new Three.DirectionalLight(0xFFFFFF);
       this.scene.add(this.light);
@@ -79,7 +102,7 @@ export default {
       this.scene.add(this.mesh);
 
       container.appendChild(this.renderer.domElement);
-      window.addEventListener( 'resize', this.onWindowResize.bind(this), false)
+      window.addEventListener('resize', this.onWindowResize, false)
 
     },
     animate: function() {
@@ -125,10 +148,6 @@ export default {
     getWindowHeight: function() {
       return window.innerHeight;
     }
-  },
-  mounted() {
-    this.init();
-    this.animate();
   }
 }
 </script>

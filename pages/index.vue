@@ -5,12 +5,18 @@
     
     <div id='main'>
       <h2 class="title pulsate noselect">
+        {{ this.emojijs.replace_colons(':fire:') }}
         Victor Shahbazian
+        {{ this.emojijs.replace_colons(':fire:') }}
       </h2>
       <h5 class="subtitle noselect">
         exploring an endless <code>void</code> of computational possibilities
       </h5>
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">></button>
+      <div v-if="rotateCube == false">
+      <button type="button" class="btn btn-success" @click.prevent="updateCube">
+        >
+      </button>
+      </div>
     </div>
     
     <div class="links fixed-bottom">
@@ -26,6 +32,7 @@
 </template>
 
 <script>
+import emojijs from 'emoji-js'
 import ThreeScene from '~/components/ThreeScene.vue'
 import NavLinks from '~/components/NavLinks.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
@@ -37,8 +44,18 @@ export default {
   },
   data() {
     return {
-      blank: 'blank'
+      blank: 'blank',
+      emojiSmile: ''
     }
+  },
+  beforeCreate: function () {
+    this.emojijs = new emojijs.EmojiConvertor();
+    document.ontouchstart = (e) => {
+      e.preventDefault();
+    }
+  },
+  created: function() {
+
   },
   computed: {
     ...mapState([

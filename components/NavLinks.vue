@@ -1,17 +1,17 @@
 <template>
   <div id='nav-container' class='fixed-top'>
     <nuxt-link to="/">
-      <button type="button" class='btn btn-outline-light'>Home</button>
+      <button type="button" class='btn btn-outline-info btn-sm'>Home</button>
     </nuxt-link>
     <nuxt-link to="/game">
-      <button type="button" class='btn btn-outline-light'>Game</button>
+      <button type="button" class='btn btn-outline-success btn-sm'>Game</button>
     </nuxt-link>
     <nuxt-link to="/about">
-      <button type="button" class='btn btn-outline-light'>About</button>
+      <button type="button" class='btn btn-outline-info btn-sm'>About</button>
     </nuxt-link>
-    <nuxt-link to="/blog">
-      <button type="button" class='btn btn-outline-light'>Blog</button>
-    </nuxt-link>
+    <!-- <nuxt-link to="/blog">
+      <button type="button" class='btn btn-outline-info btn-sm'>Blog</button>
+    </nuxt-link> -->
   </div>
 </template>
 

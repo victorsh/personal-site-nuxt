@@ -32,6 +32,24 @@ export default {
   created: function(){
     game.test();
   },
+  mounted() {
+    this.init();
+    this.animate();
+  },
+  destroyed: function() {
+    window.removeEventListener('resize', this.onWindowResize, false);
+    window.removeEventListener('keyup', printEvents, false);
+    window.removeEventListener('keydown', printEvents, false);
+    
+    window.removeEventListener('mouseup', printEvents, false);
+    window.removeEventListener('mousedown', printEvents, false);
+    window.removeEventListener('mousemove', printEvents, false);
+
+    window.removeEventListener('touchstart', printEvents, false);
+    window.removeEventListener('touchend', printEvents, false);
+    window.removeEventListener('touchcancel', printEvents, false);
+    window.removeEventListener('touchmove', printEvents, false);
+  },
   methods: {
     init: function() {
       let container = document.getElementById('three-container');
@@ -41,7 +59,7 @@ export default {
       this.clock = new Three.Clock();
 
       this.renderer = new Three.WebGLRenderer({antialias: true});
-      this.renderer.setClearColor('#000000')
+      this.renderer.setClearColor('#000000');
       this.renderer.setSize(width, height);
       this.camera.position.z = 10;
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -52,10 +70,18 @@ export default {
       game.initObjects(this.scene);
 
       container.appendChild(this.renderer.domElement);
-      window.addEventListener( 'resize', this.onWindowResize.bind(this), false);
-      window.addEventListener('keyup', function(e) { console.log(e)}, false);
-      window.addEventListener('mouseup', function(e) { console.log(e)}, false);
-      window.addEventListener('touchstart', function(e) { console.log(e)}, false);
+      window.addEventListener('resize', this.onWindowResize, false);
+      window.addEventListener('keyup', printEvents, false);
+      window.addEventListener('keydown', printEvents, false);
+
+      window.addEventListener('mousedown', printEvents, false);
+      window.addEventListener('mouseup', printEvents, false);
+      window.addEventListener('mousemove', printEvents, false);
+
+      window.addEventListener('touchstart', printEvents, false);
+      window.addEventListener('touchend', printEvents, false);
+      window.addEventListener('touchcancel', printEvents, false);
+      window.addEventListener('touchmove', printEvents, false);
 
     },
     initializeObjects: function() {
@@ -92,11 +118,11 @@ export default {
     getWindowHeight: function() {
       return window.innerHeight;
     }
-  },
-  mounted() {
-    this.init();
-    this.animate();
   }
+}
+
+function printEvents(e) {
+  console.log(e);
 }
 </script>
 
