@@ -5,6 +5,7 @@
 <script>
 import * as Three from 'three'
 import * as game from './game/game'
+import * as interactions from './game/interactions'
 import OrbitControls from 'orbit-controls-es6'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
@@ -17,8 +18,6 @@ export default {
       renderer: null,
       clock: null,
       controls: null,
-      mesh: null,
-      light: null,
     }
   },
   computed: {
@@ -30,7 +29,6 @@ export default {
     ])
   },
   created: function(){
-    game.test();
   },
   mounted() {
     this.init();
@@ -38,8 +36,8 @@ export default {
   },
   destroyed: function() {
     window.removeEventListener('resize', this.onWindowResize, false);
-    window.removeEventListener('keyup', printEvents, false);
-    window.removeEventListener('keydown', printEvents, false);
+    window.removeEventListener('keyup', interactions.handleKeyUp, false);
+    window.removeEventListener('keydown', interactions.handleKeyDown, false);
     
     window.removeEventListener('mouseup', printEvents, false);
     window.removeEventListener('mousedown', printEvents, false);
@@ -60,10 +58,13 @@ export default {
 
       this.renderer = new Three.WebGLRenderer({antialias: true});
       this.renderer.setClearColor('#000000');
+	    this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.setSize(width, height);
-      this.camera.position.z = 10;
-      this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-      this.controls.update()
+
+      this.camera.position.z = -6;
+      this.camera.position.y = 8;
+      this.camera.lookAt(0, 0, -6);
+      this.camera.position.x = -0.5;
 
       this.scene = new Three.Scene();
 
@@ -71,8 +72,8 @@ export default {
 
       container.appendChild(this.renderer.domElement);
       window.addEventListener('resize', this.onWindowResize, false);
-      window.addEventListener('keyup', printEvents, false);
-      window.addEventListener('keydown', printEvents, false);
+      window.addEventListener('keyup', interactions.handleKeyUp, false);
+      window.addEventListener('keydown', interactions.handleKeyDown, false);
 
       window.addEventListener('mousedown', printEvents, false);
       window.addEventListener('mouseup', printEvents, false);
@@ -97,11 +98,8 @@ export default {
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
-
-      this.scene.getObjectByName("octahedron").rotation.x += 0.1 * delta;
-      this.scene.getObjectByName("octahedron").rotation.y += 0.1 * delta;
-
-      this.controls.update();
+      let player = this.scene.getObjectByName("player");
+      interactions.handleMovement(delta, player, 8);
       this.renderer.render(this.scene, this.camera);
     },
     onWindowResize: function () {

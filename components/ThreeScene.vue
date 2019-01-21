@@ -87,7 +87,7 @@ export default {
       }
       this.pointsMaterial = new Three.PointsMaterial({
         color: 0xFFFFFF, map: Three.ImageUtils.loadTexture(
-          "/particle.png"
+          "/particle_white.png"
         ),
         blending: Three.AdditiveBlending,
         transparent: true

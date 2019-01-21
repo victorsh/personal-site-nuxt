@@ -8,10 +8,10 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: 'vs',
+    title: 'Victor Shahbazian',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale:1.0, user-scalable:no' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
@@ -29,6 +29,29 @@ module.exports = {
   */
   css: [
   ],
+
+  manifest: {
+    "short_name": "VS",
+    "name": "Victor Shahbazian",
+    "icons": [
+      {
+        "src": "/icons/apple-icon-180x180.png",
+        "type": "image/png",
+        "sizes": "180x180"
+      },
+      {
+        "src": "/icons/apple-icon.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "start_url": "/",
+    "background_color": "#FFFFFF",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#FFFFFF",
+    "orientation": "any"
+  },
 
   /*
   ** Plugins to load before mounting the App

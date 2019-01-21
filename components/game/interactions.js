@@ -1,10 +1,12 @@
+import * as Three from 'three';
+
 var mouseUp = true, mouseDown = false, mouseMove = false, touch, mouse;
 var leftOn= false, rightOn = false, upOn = false, downOn = false;
 var moveCount = 5;
 var preSpeed = 0;
 var moveSpeed = 5;
-var touchM = new THREE.Vector2();
-var touchS = new THREE.Vector2();
+var touchM = new Three.Vector2();
+var touchS = new Three.Vector2();
 var touchOn = false;
 
 function initInteractions(){
@@ -12,13 +14,13 @@ function initInteractions(){
     window.addEventListener('resize', onWindowResize, false);
 
     // Mouse Events
-    mouse = new THREE.Vector2();
+    mouse = new Three.Vector2();
     window.addEventListener('mousedown', handleMouseDown, false);
     window.addEventListener('mousemove', handleMouseMove, false);
     window.addEventListener('mouseup', handleMouseUp, false);
 
     // Touch Events
-    touch = new THREE.Vector2();
+    touch = new Three.Vector2();
     window.addEventListener('touchstart', handleTouchStart, false);
     window.addEventListener('touchend', handleTouchEnd, false);
     window.addEventListener('touchcancel', handleTouchCancel, false);
@@ -30,7 +32,7 @@ function initInteractions(){
 }
 
 var speedLock = false;
-function handleKeyDown(e){
+export function handleKeyDown(e){
     if(e.keyCode === 65 || e.keyCode == 37){
         // console.log('down: a');
         leftOn = true;
@@ -53,7 +55,7 @@ function handleKeyDown(e){
 }
 
 // Handle Keyboard inputs
-function handleKeyUp(e){
+export function handleKeyUp(e){
     if(e.keyCode === 65 || e.keyCode == 37){
         // console.log('up: a');
         leftOn = false;
@@ -78,7 +80,7 @@ function handleKeyUp(e){
     }
 }
 
-function handleMovement(delta) {
+export function handleMovement(delta, player, boardWidth) {
     if(leftOn || rightOn || upOn || downOn){
         if(leftOn){
             if(player.position.x > -boardWidth/2 - 0.3){
