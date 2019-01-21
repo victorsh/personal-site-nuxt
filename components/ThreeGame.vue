@@ -1,15 +1,15 @@
 <template>
-    <div id="three-container">
-    </div>
+  <div id="three-container"></div>
 </template>
 
 <script>
 import * as Three from 'three'
+import * as game from './game/game'
 import OrbitControls from 'orbit-controls-es6'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
-  name: 'ThreeScene',
+  name: 'ThreeGame',
   data() {
     return {
       camera: null,
@@ -18,9 +18,7 @@ export default {
       clock: null,
       controls: null,
       mesh: null,
-      pointsSystem: null,
       light: null,
-      accelerateCube: 0.01
     }
   },
   computed: {
@@ -32,7 +30,25 @@ export default {
     ])
   },
   created: function(){
-    console.log(this.rotateCube);
+    game.test();
+  },
+  mounted() {
+    this.init();
+    this.animate();
+  },
+  destroyed: function() {
+    window.removeEventListener('resize', this.onWindowResize, false);
+    window.removeEventListener('keyup', printEvents, false);
+    window.removeEventListener('keydown', printEvents, false);
+    
+    window.removeEventListener('mouseup', printEvents, false);
+    window.removeEventListener('mousedown', printEvents, false);
+    window.removeEventListener('mousemove', printEvents, false);
+
+    window.removeEventListener('touchstart', printEvents, false);
+    window.removeEventListener('touchend', printEvents, false);
+    window.removeEventListener('touchcancel', printEvents, false);
+    window.removeEventListener('touchmove', printEvents, false);
   },
   methods: {
     init: function() {
@@ -43,7 +59,7 @@ export default {
       this.clock = new Three.Clock();
 
       this.renderer = new Three.WebGLRenderer({antialias: true});
-      this.renderer.setClearColor('#000000')
+      this.renderer.setClearColor('#000000');
       this.renderer.setSize(width, height);
       this.camera.position.z = 10;
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -51,63 +67,39 @@ export default {
 
       this.scene = new Three.Scene();
 
+      game.initObjects(this.scene);
+
+      container.appendChild(this.renderer.domElement);
+      window.addEventListener('resize', this.onWindowResize, false);
+      window.addEventListener('keyup', printEvents, false);
+      window.addEventListener('keydown', printEvents, false);
+
+      window.addEventListener('mousedown', printEvents, false);
+      window.addEventListener('mouseup', printEvents, false);
+      window.addEventListener('mousemove', printEvents, false);
+
+      window.addEventListener('touchstart', printEvents, false);
+      window.addEventListener('touchend', printEvents, false);
+      window.addEventListener('touchcancel', printEvents, false);
+      window.addEventListener('touchmove', printEvents, false);
+
+    },
+    initializeObjects: function() {
       this.light = new Three.DirectionalLight(0xFFFFFF);
       this.scene.add(this.light);
-
-      this.pointsGeometry = new Three.Geometry()
-      for(let i = 0; i<1000; i++){
-        var point = new Three.Vector3()
-        point.x = Three.Math.randFloatSpread(100)
-        point.y = Three.Math.randFloatSpread(100)
-        point.z = Three.Math.randFloatSpread(100)
-        this.pointsGeometry.vertices.push(point)
-      }
-      this.pointsMaterial = new Three.PointsMaterial({
-        color: 0xFFFFFF, map: Three.ImageUtils.loadTexture(
-          "/particle.png"
-        ),
-        blending: Three.AdditiveBlending,
-        transparent: true
-      })
-      this.pointsSystem = new Three.Points(this.pointsGeometry, this.pointsMaterial)
-      this.pointsSystem.sortParticles = true;
-      this.scene.add(this.pointsSystem)
 
       // let geometry = new Three.BoxGeometry(2, 2, 2);
       let geometry = new Three.OctahedronBufferGeometry(2, 0);
       let material = new Three.MeshPhongMaterial({color: '#00d0ff'});
       this.mesh = new Three.Mesh(geometry, material);
       this.scene.add(this.mesh);
-
-      container.appendChild(this.renderer.domElement);
-      window.addEventListener( 'resize', this.onWindowResize.bind(this), false)
-
     },
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
-      if(this.$store.state.rotateCube){
-        this.accelerateCube += 0.1 * delta;
-        this.mesh.rotation.x += this.accelerateCube;
-        this.mesh.rotation.y += this.accelerateCube;
 
-        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
-        if(this.accelerateCube > 1.0){
-          this.$store.commit('setRotateCube', false);
-        }
-      } else {
-        if(this.accelerateCube > 0.01) {
-          this.accelerateCube -= 0.1 * delta;
-        }
-        this.mesh.rotation.x += this.accelerateCube;
-        this.mesh.rotation.y += this.accelerateCube;
-
-        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
-      }
-
-      this.pointsSystem.rotation.y -= 0.001;
-
-      // this.pointsSystem.material.opacity -= 0.01
+      this.scene.getObjectByName("octahedron").rotation.x += 0.1 * delta;
+      this.scene.getObjectByName("octahedron").rotation.y += 0.1 * delta;
 
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
@@ -126,11 +118,11 @@ export default {
     getWindowHeight: function() {
       return window.innerHeight;
     }
-  },
-  mounted() {
-    this.init();
-    this.animate();
   }
+}
+
+function printEvents(e) {
+  console.log(e);
 }
 </script>
 

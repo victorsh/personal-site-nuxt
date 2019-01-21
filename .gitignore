@@ -82,3 +82,6 @@ dist
 
 # Service Workers
 sw.*
+
+# Https certs
+*.pem

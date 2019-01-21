@@ -10,45 +10,36 @@
       <h5 class="subtitle noselect">
         exploring an endless <code>void</code> of computational possibilities
       </h5>
-      <div v-if="rotateCube == false">
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">
-        >
-      </button>
-      </div>
+      <button type="button" class="btn btn-success" @click.prevent="updateCube">></button>
     </div>
     
-    <bottom-links />
+    <div class="links fixed-bottom">
+      <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
+        <button type="button" class="btn btn-outline-success">Linkedin</button>
+      </a>
+      <a href="https://github.com/victorsh" target="_blank">
+        <button type="button" class="btn btn-outline-info">Github</button>
+      </a>
+    </div>
+
 
   </section>
 </template>
 
 <script>
-import emojijs from 'emoji-js'
 import ThreeScene from '~/components/ThreeScene.vue'
 import NavLinks from '~/components/NavLinks.vue'
-import BottomLinks from '~/components/BottomLinks.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
     ThreeScene,
-    NavLinks,
-    BottomLinks
+    NavLinks
   },
   data() {
     return {
-      blank: 'blank',
-      emojiSmile: ''
+      blank: 'blank'
     }
-  },
-  beforeCreate: function () {
-    this.emojijs = new emojijs.EmojiConvertor();
-    document.ontouchstart = (e) => {
-      e.preventDefault();
-    }
-  },
-  created: function() {
-
   },
   computed: {
     ...mapState([
@@ -139,5 +130,9 @@ export default {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.links {
+  padding: 5%;
 }
 </style>

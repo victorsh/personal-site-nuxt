@@ -8,6 +8,7 @@ export default {
     mintingToken: false,
     tokenMinted: false,
     rotateCube: false,
+    pageState: 'start'
   }),
   /* ******************************************** */
   // Actions
@@ -32,6 +33,9 @@ export default {
     },
     setRotateCube (state, status) {
       state.rotateCube = status;
+    },
+    setPageState (state, status) {
+      state.pageState = status;
     }
   }
 }

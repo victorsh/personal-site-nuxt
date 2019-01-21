@@ -1,54 +1,31 @@
 <template>
   <section class="container">
-    <nav-links/>
-    <three-scene/>
-    
-    <div id='main'>
-      <h2 class="title pulsate noselect">
-        Victor Shahbazian
-      </h2>
-      <h5 class="subtitle noselect">
-        exploring an endless <code>void</code> of computational possibilities
-      </h5>
-      <div v-if="rotateCube == false">
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">
-        >
-      </button>
-      </div>
+    <three-game/>
+    <div class='under-construction'>
+      Game is under construction, come back soon!
     </div>
-    
-    <bottom-links />
-
+    <nav-links/>
   </section>
 </template>
 
 <script>
-import emojijs from 'emoji-js'
-import ThreeScene from '~/components/ThreeScene.vue'
+import ThreeGame from '~/components/ThreeGame.vue'
 import NavLinks from '~/components/NavLinks.vue'
-import BottomLinks from '~/components/BottomLinks.vue'
+import emojijs from 'emoji-js'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
-    ThreeScene,
-    NavLinks,
-    BottomLinks
+    ThreeGame,
+    NavLinks
   },
   data() {
     return {
-      blank: 'blank',
-      emojiSmile: ''
+      blank: 'blank'
     }
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.emojijs = new emojijs.EmojiConvertor();
-    document.ontouchstart = (e) => {
-      e.preventDefault();
-    }
-  },
-  created: function() {
-
   },
   computed: {
     ...mapState([
@@ -73,6 +50,11 @@ export default {
 
 <style>
 #main {
+  position: relative;
+  z-index: 1;
+}
+
+#navi{
   position: relative;
   z-index: 1;
 }
@@ -139,5 +121,12 @@ export default {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+.under-construction {
+  position: relative;
+  z-index: 1;
+  font-size: 36px;
+  color: white;
 }
 </style>

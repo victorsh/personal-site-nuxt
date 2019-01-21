@@ -1,19 +1,35 @@
 <template>
-  <section class="container">
+  <section class="container-about">
     <nav-links/>
     <three-scene/>
     
-    <div id='main'>
-      <h2 class="title pulsate noselect">
-        Victor Shahbazian
-      </h2>
-      <h5 class="subtitle noselect">
-        exploring an endless <code>void</code> of computational possibilities
-      </h5>
-      <div v-if="rotateCube == false">
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">
-        >
-      </button>
+    <div id='main-about'>
+      <div class='title-about'>About</div>
+      <div class='subtitle-about'>
+        <p>I'm a computer science graduate with an interest in web based technologies. Computers have
+        facinated me all throughout my life. I'd like to learn everything there is to know about 
+        computation, unfortunatly, this requires a large amount of horizontal and vertical scaling. To remedy
+        this conundrum I decided to focus my computational curiosity on web based technologies. The web has always 
+        fascinated me in it's ability to run on any device with a connection to the internet.</p>
+        <p> Even when focusing my attention to a single field of computation, I still feel overwhelmed by the vast array
+        of possibilities based around web based development. This is however more exciting to me than anything
+        else, I feel fortunate to live in a time where there is so much progress being made on the web. I will
+        continue to explore and create using these rapidly changing technologies and hopefully, in the future,
+        contribute to their enchancement. </p>
+      </div>
+
+      <div class='title-about'>this.site</div>
+      <div class='subtitle-about'>
+        This website was built using a combination of related technologies.
+        I can break down the app as hosting, frameworks, and graphics.
+        <ul>
+          <li>I'm using ...</li>
+          <ul>
+            <li>Netlify as hosting and continuos development and integration.</li>
+            <li>NuxtJS + Bootstrap to build the front-end.</li>
+            <li>ThreeJS to create the 3D visuals.</li>
+          </ul>
+        </ul>
       </div>
     </div>
     
@@ -23,11 +39,11 @@
 </template>
 
 <script>
-import emojijs from 'emoji-js'
 import ThreeScene from '~/components/ThreeScene.vue'
 import NavLinks from '~/components/NavLinks.vue'
 import BottomLinks from '~/components/BottomLinks.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import emojijs from 'emoji-js'
 
 export default {
   components: {
@@ -37,18 +53,11 @@ export default {
   },
   data() {
     return {
-      blank: 'blank',
-      emojiSmile: ''
+      blank: 'blank'
     }
   },
-  beforeCreate: function () {
+  beforeCreate: function() {
     this.emojijs = new emojijs.EmojiConvertor();
-    document.ontouchstart = (e) => {
-      e.preventDefault();
-    }
-  },
-  created: function() {
-
   },
   computed: {
     ...mapState([
@@ -72,17 +81,28 @@ export default {
 </script>
 
 <style>
-#main {
+#main-about {
   position: relative;
   z-index: 1;
+  text-align: left;
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
-.container {
+#main-about ul li {
+  list-style-type: none;
+  color: #82ffd9;
+}
+
+.container-about {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  flex-direction: column;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .container h2 {
@@ -93,13 +113,13 @@ export default {
   font-size: 20px;
 }
 
-.title {
+.title-about {
   font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
     'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   display: block;
   font-weight: 300;
-  font-size: 100px;
-  color: #fff6d6;
+  font-size: 28px;
+  color: #ff0000;
   letter-spacing: 1px;
 }
 
@@ -123,9 +143,9 @@ export default {
   }
 }
 
-.subtitle {
+.subtitle-about {
   font-weight: 300;
-  font-size: 42px;
+  font-size: 16px;
   color: #fff9e5;
   word-spacing: 5px;
   padding-bottom: 15px;
