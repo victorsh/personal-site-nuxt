@@ -1,5 +1,5 @@
 <template>
-  <div v-bind:class="{'about-bottom-links': isAbout, 'home-bottom-links': isHome}" class="fixed-bottom">
+  <div v-bind:class="{'about-bottom-links': isAbout, 'home-bottom-links': isHome, 'game-bottom-links': isGame}" class="fixed-bottom">
     <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
       <button type="button" class="btn btn-outline-success">Linkedin</button>
     </a>

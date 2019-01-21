@@ -56,9 +56,6 @@ export default {
       blank: 'blank'
     }
   },
-  beforeCreate: function() {
-    this.emojijs = new emojijs.EmojiConvertor();
-  },
   computed: {
     ...mapState([
       'rotateCube',
@@ -160,4 +157,8 @@ export default {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
+  #nav-container {
+    padding: 10px;
+  }
 </style>

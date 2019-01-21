@@ -5,9 +5,8 @@ export default {
   // State
   /* ******************************************** */
   state: () => ({
-    mintingToken: false,
-    tokenMinted: false,
     rotateCube: false,
+    cubeRotateButton: true,
     pageState: 'start'
   }),
   /* ******************************************** */
@@ -25,14 +24,11 @@ export default {
   // Mutations
   /* ******************************************** */
   mutations: {
-    setMintingToken (state, status) {
-      state.mintingToken = status;
-    },
-    setTokenMinted (state, status) {
-      state.tokenMinted = status;
-    },
     setRotateCube (state, status) {
       state.rotateCube = status;
+    },
+    setCubeRotateButton (state, status) {
+      state.cubeRotateButton = status;
     },
     setPageState (state, status) {
       state.pageState = status;

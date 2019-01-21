@@ -1,5 +1,5 @@
 <template>
-  <div id='nav-container' v-bind:class="{'nav-home': isHome, 'nav-about': isAbout, 'nav-game': isGame}" class='fixed-top'>
+  <div id='nav-container' v-bind:class="{'nav-about': isAbout, 'nav-home': isHome, 'nav-game': isGame}" class='fixed-top'>
     <nuxt-link to="/">
       <button type="button" class='btn btn-outline-info btn-sm'>Home</button>
     </nuxt-link>
@@ -20,12 +20,12 @@ import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'NavLinks',
-  components: {
-
-  },
   data() {
     return {
-      black: 'blank'
+      black: 'blank',
+      isHome: false,
+      isAbout: false,
+      isGame: false
     }
   },
   beforeMount: function() {
@@ -45,20 +45,15 @@ export default {
   },
   computed: {
     ...mapState([
-      'rotateCube',
-      'pageState'
+      'rotateCube'
     ]),
     ...mapMutations([
-      'setRotateCube',
-      'setPageState'
+      'setRotateCube'
     ])
   },
   methods: {
     updateCube: function() {
       this.$store.commit('setRotateCube', true);
-    },
-    switchPage: function(page) {
-      this.$store.commit('setPageState', page)
     }
   }
 }
