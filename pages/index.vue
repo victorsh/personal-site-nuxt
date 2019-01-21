@@ -10,10 +10,10 @@
       <h5 class="subtitle noselect">
         exploring an endless <code>void</code> of computational possibilities
       </h5>
-      <div v-if="rotateCube == false">
-      <button type="button" class="btn btn-success" @click.prevent="updateCube">
-        >
-      </button>
+      <div v-if="cubeRotateButton === true">
+        <button type="button" class="btn btn-success" @click.prevent="updateCube">
+          >
+        </button>
       </div>
     </div>
     
@@ -41,28 +41,25 @@ export default {
       emojiSmile: ''
     }
   },
-  beforeCreate: function () {
-    this.emojijs = new emojijs.EmojiConvertor();
-    document.ontouchstart = (e) => {
-      e.preventDefault();
-    }
-  },
   created: function() {
 
   },
   computed: {
     ...mapState([
       'rotateCube',
+      'cubeRotateButton',
       'pageState'
     ]),
     ...mapMutations([
       'setRotateCube',
+      'setCubeRotateButton',
       'setPageState'
     ])
   },
   methods: {
     updateCube: function() {
       this.$store.commit('setRotateCube', true);
+      this.$store.commit('setCubeRotateButton', false);
     },
     switchPage: function(page) {
       this.$store.commit('setPageState', page)
@@ -74,7 +71,7 @@ export default {
 <style>
 #main {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .container {
@@ -140,4 +137,8 @@ export default {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
 }
+
+  #nav-container {
+    padding: 10px;
+  }
 </style>

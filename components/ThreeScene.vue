@@ -1,6 +1,5 @@
 <template>
-  <div id="three-container">
-  </div>
+  <div id="three-container"></div>
 </template>
 
 <script>
@@ -25,10 +24,12 @@ export default {
   },
   computed: {
     ...mapState([
-      'rotateCube'
+      'rotateCube',
+      'cubeRotationButton'
     ]),
     ...mapMutations([
-      'setRotateCube'
+      'setRotateCube',
+      'setCubeRotateButton'
     ])
   },
   created: function(){
@@ -120,6 +121,8 @@ export default {
       } else {
         if(this.accelerateCube > 0.01) {
           this.accelerateCube -= 0.1 * delta;
+        } else {
+          this.$store.commit('setCubeRotateButton', true);
         }
         this.mesh.rotation.x += this.accelerateCube;
         this.mesh.rotation.y += this.accelerateCube;
