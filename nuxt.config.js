@@ -4,12 +4,6 @@ const fs = require('fs')
 
 module.exports = {
   mode: 'spa',
-  server: {
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'localhost+2-key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'localhost+2.pem'))
-    }
-  },
   /*
   ** Headers of the page
   */
