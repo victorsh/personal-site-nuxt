@@ -53,6 +53,8 @@ export default {
 <style>
   #nav-container {
     z-index: 1;
-    padding: 15px;
+    padding: 10px;
+    background: white;
+    opacity: 0.9;
   }
 </style>

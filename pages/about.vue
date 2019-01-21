@@ -6,35 +6,34 @@
     <div id='main-about'>
       <div class='title-about'>About</div>
       <div class='subtitle-about'>
-        I'm a computer science graduate with an interest in web based technologies. Computers have
+        <p>I'm a computer science graduate with an interest in web based technologies. Computers have
         facinated me all throughout my life. I'd like to learn everything there is to know about 
-        computer, unfortunatly, this requires a large of horizontal and vertical scaling. To remedy
-        this conundrum I decided to focus my computational curiosity on web based technologies. 
+        computation, unfortunatly, this requires a large amount of horizontal and vertical scaling. To remedy
+        this conundrum I decided to focus my computational curiosity on web based technologies. The web has always 
+        fascinated me in it's ability to run on any device with a connection to the internet.</p>
+        <p> Even when focusing my attention to a single field of computation, I still feel overwhelmed by the vast array
+        of possibilities based around web based development. This is however more exciting to me than anything
+        else, I feel fortunate to live in a time where there is so much progress being made on the web. I will
+        continue to explore and create using these rapidly changing technologies and hopefully, in the future,
+        contribute to their enchancement. </p>
       </div>
-    </div>
-    
-    <div id='main-about'>
+
       <div class='title-about'>this.site</div>
       <div class='subtitle-about'>
         This website was built using a combination of related technologies.
         I can break down the app as hosting, frameworks, and graphics.
         <ul>
-          <li>I'm using netlify to host this site.</li>
-          <li>I'm using VueJS to build the front-end of this site.</li>
-          <li>I'm using threeJS to create creating the 3D for this site.</li>
+          <li>I'm using ...</li>
+          <ul>
+            <li>Netlify as hosting and continuos development and integration.</li>
+            <li>NuxtJS + Bootstrap to build the front-end.</li>
+            <li>ThreeJS to create the 3D visuals.</li>
+          </ul>
         </ul>
       </div>
     </div>
-
-    <div class="links fixed-bottom">
-      <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
-        <button type="button" class="btn btn-outline-success">Linkedin</button>
-      </a>
-      <a href="https://github.com/victorsh" target="_blank">
-        <button type="button" class="btn btn-outline-info">Github</button>
-      </a>
-    </div>
-
+    
+    <bottom-links />
 
   </section>
 </template>
@@ -42,17 +41,23 @@
 <script>
 import ThreeScene from '~/components/ThreeScene.vue'
 import NavLinks from '~/components/NavLinks.vue'
+import BottomLinks from '~/components/BottomLinks.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import emojijs from 'emoji-js'
 
 export default {
   components: {
     ThreeScene,
-    NavLinks
+    NavLinks,
+    BottomLinks
   },
   data() {
     return {
       blank: 'blank'
     }
+  },
+  beforeCreate: function() {
+    this.emojijs = new emojijs.EmojiConvertor();
   },
   computed: {
     ...mapState([
@@ -80,11 +85,13 @@ export default {
   position: relative;
   z-index: 1;
   text-align: left;
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
 #main-about ul li {
   list-style-type: none;
-  color: #3399bb;
+  color: #82ffd9;
 }
 
 .container-about {
@@ -152,9 +159,5 @@ export default {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
-}
-
-.links {
-  padding: 5%;
 }
 </style>

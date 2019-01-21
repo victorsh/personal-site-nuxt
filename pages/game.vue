@@ -1,6 +1,9 @@
 <template>
   <section class="container">
     <three-game/>
+    <div class='under-construction'>
+      Game is under construction, come back soon!
+    </div>
     <nav-links/>
   </section>
 </template>
@@ -8,6 +11,7 @@
 <script>
 import ThreeGame from '~/components/ThreeGame.vue'
 import NavLinks from '~/components/NavLinks.vue'
+import emojijs from 'emoji-js'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
@@ -19,6 +23,9 @@ export default {
     return {
       blank: 'blank'
     }
+  },
+  beforeCreate: function() {
+    this.emojijs = new emojijs.EmojiConvertor();
   },
   computed: {
     ...mapState([
@@ -116,7 +123,10 @@ export default {
                                   supported by Chrome and Opera */
 }
 
-.links {
-  padding: 5%;
+.under-construction {
+  position: relative;
+  z-index: 1;
+  font-size: 36px;
+  color: white;
 }
 </style>
