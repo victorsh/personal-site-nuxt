@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed-bottom bottom-page-links">
+  <div v-bind:class="{'about-bottom-links': isAbout, 'home-bottom-links': isHome}" class="fixed-bottom">
     <a href="https://linkedin.com/in/victor-shahbazian/" target="_blank">
       <button type="button" class="btn btn-outline-success">Linkedin</button>
     </a>
@@ -19,7 +19,25 @@ export default {
   },
   data() {
     return {
-      black: 'blank'
+      black: 'blank',
+      isHome: false,
+      isAbout: false,
+      isGame: false,
+    }
+  },
+  beforeMount: function() {
+    if(this.$route.path === '/'){
+      this.isHome = true;
+      this.isAbout = false;
+      this.isGame = false;
+    } else if(this.$route.path === '/about') {
+      this.isAbout = true;
+      this.isHome = false;
+      this.isGame = false;
+    } else if(this.$route.path === '/game') {
+      this.isGame = true;
+      this.isAbout = false;
+      this.isHome = false;
     }
   },
   computed: {
@@ -45,8 +63,21 @@ export default {
 
 <style>
 
-.bottom-page-links {
+.about-bottom-links {
+  z-index: 2;
+  opacity: 0.9;
+  padding: 10px;
   background: white;
+}
+
+.home-bottom-links {
+  z-index: 2;
+  opacity: 0.9;
+  padding: 10px;
+}
+
+.game-bottom-links {
+  z-index: 2;
   opacity: 0.9;
   padding: 10px;
 }

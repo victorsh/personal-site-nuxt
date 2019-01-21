@@ -1,5 +1,5 @@
 <template>
-  <div id='nav-container' class='fixed-top'>
+  <div id='nav-container' v-bind:class="{'nav-home': isHome, 'nav-about': isAbout, 'nav-game': isGame}" class='fixed-top'>
     <nuxt-link to="/">
       <button type="button" class='btn btn-outline-info btn-sm'>Home</button>
     </nuxt-link>
@@ -28,6 +28,21 @@ export default {
       black: 'blank'
     }
   },
+  beforeMount: function() {
+    if(this.$route.path === '/'){
+      this.isHome = true;
+      this.isAbout = false;
+      this.isGame = false;
+    } else if(this.$route.path === '/about') {
+      this.isAbout = true;
+      this.isHome = false;
+      this.isGame = false;
+    } else if(this.$route.path === '/game') {
+      this.isGame = true;
+      this.isAbout = false;
+      this.isHome = false;
+    }
+  },
   computed: {
     ...mapState([
       'rotateCube',
@@ -52,9 +67,18 @@ export default {
 
 <style>
   #nav-container {
-    z-index: 1;
+    z-index: 2;
     padding: 10px;
+  }
+  .nav-home {
+    background: none;
+  }
+
+  .nav-about {
     background: white;
-    opacity: 0.9;
+  }
+
+  .nav-game {
+    background: none;
   }
 </style>
