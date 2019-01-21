@@ -127,11 +127,13 @@ export default {
           this.$store.commit('setRotateCube', false);
         }
       } else {
-        if(this.accelerateCube > 0.01) {
-          this.accelerateCube -= 0.1 * delta;
-        } else {
+        if(this.accelerateCube > 0.01 && this.accelerateCube < 0.02){
           this.$store.commit('setCubeRotateButton', true);
         }
+        if(this.accelerateCube > 0.01) {
+          this.accelerateCube -= 0.1 * delta;
+        }
+
         this.mesh.rotation.x += this.accelerateCube;
         this.mesh.rotation.y += this.accelerateCube;
 
