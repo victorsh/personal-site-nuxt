@@ -4,8 +4,8 @@
 
 <script>
 import * as Three from 'three'
-import * as game from './game/game'
-import * as interactions from './game/interactions'
+// import * as game from './game/game'
+// import * as interactions from './game/interactions'
 import OrbitControls from 'orbit-controls-es6'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
@@ -36,17 +36,17 @@ export default {
   },
   destroyed: function() {
     window.removeEventListener('resize', this.onWindowResize, false);
-    window.removeEventListener('keyup', interactions.handleKeyUp, false);
-    window.removeEventListener('keydown', interactions.handleKeyDown, false);
+    // window.removeEventListener('keyup', interactions.handleKeyUp, false);
+    // window.removeEventListener('keydown', interactions.handleKeyDown, false);
     
-    window.removeEventListener('mouseup', printEvents, false);
-    window.removeEventListener('mousedown', printEvents, false);
-    window.removeEventListener('mousemove', printEvents, false);
+    // window.removeEventListener('mouseup', printEvents, false);
+    // window.removeEventListener('mousedown', printEvents, false);
+    // window.removeEventListener('mousemove', printEvents, false);
 
-    window.removeEventListener('touchstart', printEvents, false);
-    window.removeEventListener('touchend', printEvents, false);
-    window.removeEventListener('touchcancel', printEvents, false);
-    window.removeEventListener('touchmove', printEvents, false);
+    // window.removeEventListener('touchstart', printEvents, false);
+    // window.removeEventListener('touchend', printEvents, false);
+    // window.removeEventListener('touchcancel', printEvents, false);
+    // window.removeEventListener('touchmove', printEvents, false);
   },
   methods: {
     init: function() {
@@ -61,28 +61,29 @@ export default {
 	    this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.setSize(width, height);
 
-      this.camera.position.z = -6;
-      this.camera.position.y = 8;
-      this.camera.lookAt(0, 0, -6);
-      this.camera.position.x = -0.5;
+      this.camera.position.z = -2;
+      this.camera.position.y = 0;
+      this.camera.lookAt(0, 0, 0);
+      this.camera.position.x = 0;
 
       this.scene = new Three.Scene();
 
-      game.initObjects(this.scene);
+      // game.initObjects(this.scene);
+      this.initializeObjects();
 
       container.appendChild(this.renderer.domElement);
       window.addEventListener('resize', this.onWindowResize, false);
-      window.addEventListener('keyup', interactions.handleKeyUp, false);
-      window.addEventListener('keydown', interactions.handleKeyDown, false);
+      // window.addEventListener('keyup', interactions.handleKeyUp, false);
+      // window.addEventListener('keydown', interactions.handleKeyDown, false);
 
-      window.addEventListener('mousedown', printEvents, false);
-      window.addEventListener('mouseup', printEvents, false);
-      window.addEventListener('mousemove', printEvents, false);
+      // window.addEventListener('mousedown', printEvents, false);
+      // window.addEventListener('mouseup', printEvents, false);
+      // window.addEventListener('mousemove', printEvents, false);
 
-      window.addEventListener('touchstart', printEvents, false);
-      window.addEventListener('touchend', printEvents, false);
-      window.addEventListener('touchcancel', printEvents, false);
-      window.addEventListener('touchmove', printEvents, false);
+      // window.addEventListener('touchstart', printEvents, false);
+      // window.addEventListener('touchend', printEvents, false);
+      // window.addEventListener('touchcancel', printEvents, false);
+      // window.addEventListener('touchmove', printEvents, false);
 
     },
     initializeObjects: function() {
@@ -98,8 +99,8 @@ export default {
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
-      let player = this.scene.getObjectByName("player");
-      interactions.handleMovement(delta, player, 8);
+      // let player = this.scene.getObjectByName("player");
+      // interactions.handleMovement(delta, player, 8);
       this.renderer.render(this.scene, this.camera);
     },
     onWindowResize: function () {
