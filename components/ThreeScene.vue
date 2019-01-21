@@ -97,8 +97,16 @@ export default {
       this.scene.add(this.pointsSystem)
 
       // let geometry = new Three.BoxGeometry(2, 2, 2);
-      let geometry = new Three.OctahedronBufferGeometry(2, 0);
-      let material = new Three.MeshPhongMaterial({color: '#00d0ff'});
+      let geometry;
+      let material;
+      if(this.$route.path === '/') {
+        geometry = new Three.OctahedronBufferGeometry(2, 0);
+        material = new Three.MeshPhongMaterial({color: '#00d0ff'});
+      } else if (this.$route.path === '/about') {
+        geometry = new Three.IcosahedronBufferGeometry(2, 0);
+        material = new Three.MeshPhongMaterial({color: '#1eff8b', wireframe: true});
+      }
+      
       this.mesh = new Three.Mesh(geometry, material);
       this.scene.add(this.mesh);
 

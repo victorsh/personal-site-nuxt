@@ -25,9 +25,10 @@
         <ul>
           <li>I'm using ...</li>
           <ul>
-            <li>Netlify as hosting and continuos development and integration.</li>
+            <li>Netlify as hosting, enabling continuos integration & development.</li>
             <li>NuxtJS + Bootstrap to build the front-end.</li>
             <li>ThreeJS to create the 3D visuals.</li>
+            <li>Express for the back-end.</li>
           </ul>
         </ul>
       </div>
@@ -88,7 +89,7 @@ export default {
 
 #main-about ul li {
   list-style-type: none;
-  color: #82ffd9;
+  color: #1eff8b;
 }
 
 .container-about {
