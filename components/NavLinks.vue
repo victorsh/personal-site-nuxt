@@ -29,6 +29,9 @@ export default {
     }
   },
   beforeMount: function() {
+
+  },
+  created: function() {
     if(this.$route.path === '/'){
       this.isHome = true;
       this.isAbout = false;
