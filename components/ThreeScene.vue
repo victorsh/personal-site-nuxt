@@ -1,25 +1,27 @@
 <template>
-  <div id="three-container"></div>
+  <div>
+    <div v-if="loading" id="three-loading">Loading...</div>
+    <div id="three-container"></div>
+  </div>
 </template>
 
 <script>
-import * as Three from 'three'
+import * as THREE from 'three'
 import OrbitControls from 'orbit-controls-es6'
+import * as utils from './utils/timeout';
 import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   name: 'ThreeScene',
   data() {
     return {
+      loading: true,
       camera: null,
       scene: null,
       renderer: null,
       clock: null,
       controls: null,
-      mesh: null,
-      pointsSystem: null,
-      light: null,
-      accelerateCube: 0.01
+      accelerateCube: 0.01,
     }
   },
   computed: {
@@ -33,96 +35,99 @@ export default {
     ])
   },
   created: function(){
+
   },
   mounted() {
-    this.init();
-    this.animate();
+    let loadDiv = document.querySelector('#three-loading');
+    loadDiv.style.top = window.innerHeight/10 - loadDiv.offsetHeight/2 + 'px';
+    loadDiv.style.left = window.innerWidth/2 - loadDiv.offsetWidth/2 + 'px';
+
+    this.init().then(()=>{
+      this.loading = false;
+      this.animate();
+    });
   },
   destroyed: function() {
     document.removeEventListener('resize', this.onWindowResize, false);
   },
   methods: {
-    init: function() {
-      let container = document.getElementById('three-container');
-      let width = window.innerWidth;
-      let height = window.innerHeight;
-      this.camera = new Three.PerspectiveCamera(75, width/height, 0.1, 1000);
-      this.clock = new Three.Clock();
+    loadTextures: async function() {
 
-      this.renderer = new Three.WebGLRenderer({antialias: true});
+    },
+    init: async function() {
+      let container = document.getElementById('three-container');
+      const windowWidth = window.innerWidth;
+      const windowHeight = window.innerHeight;
+      this.camera = new THREE.PerspectiveCamera(75, windowWidth/windowHeight, 0.1, 1000);
+      this.clock = new THREE.Clock();
+
+      this.renderer = new THREE.WebGLRenderer({antialias: true});
       this.renderer.setClearColor('#000000')
-      this.renderer.setSize(width, height);
+      this.renderer.setSize(windowWidth, windowHeight);
       this.camera.position.z = 10;
       this.controls = new OrbitControls(this.camera, this.renderer.domElement);
       this.controls.update()
 
-      this.scene = new Three.Scene();
+      this.scene = new THREE.Scene();
 
-      // Loading
-      this.loadingManagerThree = new Three.LoadingManager(() => {
-        console.log('loading');
-      });
-      this.loader = new Three.ImageLoader();
-      this.loader.load(
-        '/particle.png',
-        function (image) {
-          console.log('loaded');
-        },
-        undefined,
-        function () {
-          console.error('An error has occurred loading the particle image');
-        }
-      )
+      // Load Textures
+      let particleTexture = await this.loadTexture('/particle_white.png');
 
-      this.light = new Three.DirectionalLight(0xFFFFFF);
-      this.scene.add(this.light);
+      // Setup Light
+      let dirLight = new THREE.DirectionalLight(0xFFFFFF);
+      this.scene.add(dirLight);
 
-      this.pointsGeometry = new Three.Geometry()
+      // Setup Particle System
+      let pointsGeometry = new THREE.Geometry();
       for(let i = 0; i<1000; i++){
-        var point = new Three.Vector3()
-        point.x = Three.Math.randFloatSpread(100)
-        point.y = Three.Math.randFloatSpread(100)
-        point.z = Three.Math.randFloatSpread(100)
-        this.pointsGeometry.vertices.push(point)
+        let point = new THREE.Vector3()
+        point.x = THREE.Math.randFloatSpread(100)
+        point.y = THREE.Math.randFloatSpread(100)
+        point.z = THREE.Math.randFloatSpread(100)
+        pointsGeometry.vertices.push(point)
       }
-      this.pointsMaterial = new Three.PointsMaterial({
-        color: 0xFFFFFF, map: Three.ImageUtils.loadTexture(
-          "/particle_white.png"
-        ),
-        blending: Three.AdditiveBlending,
+      let pointsMaterial = new THREE.PointsMaterial({
+        color: 0xFFFFFF, map: particleTexture,
+        blending: THREE.NormalBlending,
         transparent: true
       })
-      this.pointsSystem = new Three.Points(this.pointsGeometry, this.pointsMaterial)
-      this.pointsSystem.sortParticles = true;
-      this.scene.add(this.pointsSystem)
+      let pointsSystem = new THREE.Points(pointsGeometry, pointsMaterial);
+      pointsSystem.sortParticles = true;
+      pointsSystem.name = 'the-particles';
+      this.scene.add(pointsSystem);
 
-      // let geometry = new Three.BoxGeometry(2, 2, 2);
+      // Create Rotation Object
+      // Change rendered objecty shape and color based on Route Path
       let geometry;
       let material;
       if(this.$route.path === '/') {
-        geometry = new Three.OctahedronBufferGeometry(2, 0);
-        material = new Three.MeshPhongMaterial({color: '#00d0ff'});
+        geometry = new THREE.OctahedronBufferGeometry(2, 0);
+        material = new THREE.MeshPhongMaterial({color: '#00d0ff'});
       } else if (this.$route.path === '/about') {
-        geometry = new Three.IcosahedronBufferGeometry(2, 0);
-        material = new Three.MeshPhongMaterial({color: '#1eff8b', wireframe: true});
+        geometry = new THREE.IcosahedronBufferGeometry(2, 0);
+        material = new THREE.MeshPhongMaterial({color: '#1eff8b', wireframe: true});
       }
       
-      this.mesh = new Three.Mesh(geometry, material);
-      this.scene.add(this.mesh);
+      let mesh = new THREE.Mesh(geometry, material);
+      mesh.name = 'rotator-object';
+      this.scene.add(mesh);
 
       container.appendChild(this.renderer.domElement);
       window.addEventListener('resize', this.onWindowResize, false)
 
+      // await utils.timeout(3000);
     },
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
+      let rtObject = this.scene.getObjectByName('rotator-object');
+      let pointsSystem = this.scene.getObjectByName('the-particles');
       if(this.$store.state.rotateCube){
         this.accelerateCube += 0.1 * delta;
-        this.mesh.rotation.x += this.accelerateCube;
-        this.mesh.rotation.y += this.accelerateCube;
+        rtObject.rotation.x += this.accelerateCube;
+        rtObject.rotation.y += this.accelerateCube;
 
-        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
+        pointsSystem.rotation.x += this.accelerateCube * 0.01;
         if(this.accelerateCube > 1.0){
           this.$store.commit('setRotateCube', false);
         }
@@ -134,18 +139,21 @@ export default {
           this.accelerateCube -= 0.1 * delta;
         }
 
-        this.mesh.rotation.x += this.accelerateCube;
-        this.mesh.rotation.y += this.accelerateCube;
+        rtObject.rotation.x += this.accelerateCube;
+        rtObject.rotation.y += this.accelerateCube;
 
-        this.pointsSystem.rotation.x += this.accelerateCube * 0.01;
+        pointsSystem.rotation.x += this.accelerateCube * 0.01;
       }
 
-      this.pointsSystem.rotation.y -= 0.001;
-
-      // this.pointsSystem.material.opacity -= 0.01
+      pointsSystem.rotation.y -= 0.001;
 
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
+    },
+    loadTexture: function(url) {
+      return new Promise(resolve => {
+        new THREE.TextureLoader().load(url, resolve);
+      })
     },
     onWindowResize: function () {
       let width = this.getWindowWidth();
@@ -163,6 +171,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -172,5 +181,14 @@ export default {
     height: 100%;
     top: 0px;
     left: 0px;
+  }
+
+  #three-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    text-align: center;
+    z-index: 1;
+    color: white;
   }
 </style>
