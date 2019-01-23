@@ -6,6 +6,7 @@
 import * as Three from 'three'
 import Game from './game/game'
 import * as utils from './utils/timeout'
+import * as Stats from 'stats-js'
 
 import OrbitControls from 'orbit-controls-es6'
 import { mapState, mapActions, mapMutations } from 'vuex'
@@ -20,7 +21,8 @@ export default {
       renderer: null,
       clock: null,
       controls: null,
-      game: null
+      game: null,
+      stats: null
     }
   },
   computed: {
@@ -41,9 +43,16 @@ export default {
   },
   destroyed: function() {
     window.removeEventListener('resize', this.onWindowResize, false);
+    this.game.removeInteractions();
   },
   methods: {
     init: async function() {
+      
+      // Enable Stats
+      this.stats = new Stats();
+      this.stats.showPanel(0);
+      document.body.appendChild(this.stats.dom);
+
       let container = document.getElementById('three-container');
       let width = window.innerWidth;
       let height = window.innerHeight;
@@ -68,9 +77,9 @@ export default {
       this.game = new Game();
       this.game.initObjects(this.scene);
       this.game.initInteractions();
-      this.game.removeInteractions();
     },
     animate: function() {
+      this.stats.begin();
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
       
@@ -79,6 +88,7 @@ export default {
       this.game.loop(this.scene, delta);
 
       this.renderer.render(this.scene, this.camera);
+      this.stats.end();
     },
     onWindowResize: function () {
       let width = this.getWindowWidth();

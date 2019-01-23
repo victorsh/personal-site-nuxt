@@ -2,6 +2,9 @@ import * as THREE from 'three';
 
 function Game() {
   this.pause = false;
+  this.timeDiff = 0;
+  this.speed = 2;
+  this.genInterval = 2;
 
   this.boardHeight = 14;
   this.boardWidth = 8;
@@ -12,7 +15,9 @@ function Game() {
   this.disabledCoins = [];
   this.enabledCoins = [];
   this.disabledObstacles = [];
-  this.enabledObstacles = []
+  this.enabledObstacles = [];
+
+
 }
 
 Game.prototype.initObjects = function(scene) {
@@ -78,7 +83,7 @@ Game.prototype.initObjects = function(scene) {
     let obstacle = new THREE.Mesh(boxGeom, boxMat);
     obstacle.name = 'obstacle-'+i;
     this.disabledObstacles.push(obstacle.name);
-    obstacle.position.x = 1;
+    obstacle.position.x = 5;
     obstacle.position.y = -0.7;
     obstacle.position.z = -8;
     scene.add(obstacle);
@@ -112,23 +117,48 @@ Game.prototype.removeInteractions = function(){
 }
 
 Game.prototype.loop = function(scene, delta) {
-  for(let i = 0; i<this.boardWidth*this.boardHeight; i++){
-    let coin = scene.getObjectByName('coin-'+i);
-    let obstacle = scene.getObjectByName('obstacle-'+i);
-    coin.rotation.x += 0.1;
-    obstacle.rotation.y += 0.1;
+  this.timeDiff += delta;
+  if(this.timeDiff > this.genInterval) {
+    this.objectLogic(scene, delta);
+    this.timeDiff = 0;
+  }
+
+  // Handle Animation and Collision
+  for(let i = 0; i<this.enabledObstacles.length; i++){
+    
+    if(typeof this.enabledCoins[i] !== 'undefined'){
+      let coin = scene.getObjectByName(this.enabledCoins[i]);
+      coin.position.z += this.speed * delta;
+      if (coin.position.z > 1){
+        coin.position.z = -15;
+      }
+    }
+    
+    let obstacle = scene.getObjectByName(this.enabledObstacles[i]);
+    obstacle.position.z += this.speed * delta;
+    if(obstacle.position.z > 1) {
+      obstacle.position.z = -15;
+    }
   }
 }
 
 Game.prototype.objectLogic = function(scene, delta) {
   
-  let obstacleName = this.disabledObstacles.pop();
-  let obstacle = scene.getObjectByName(obstacleName);
-  this.enabledObstacles.push(obstacleName);
+  for(let i = 0; i<this.boardWidth; i++){
 
-  let coinName = this.disabledCoins.pop();
-  let coin = scene.getObjectByName(coinName);
-  this.enabledCoins.push(coinName);
+  }
+
+  if(this.disabledObstacles.length !== 0){
+    let obstacleName = this.disabledObstacles.pop();
+    let obstacle = scene.getObjectByName(obstacleName);
+    this.enabledObstacles.push(obstacleName);
+  }
+
+  if(this.disabledCoins.length !== 0){
+    let coinName = this.disabledCoins.pop();
+    let coin = scene.getObjectByName(coinName);
+    this.enabledCoins.push(coinName);
+  }
 }
 
 function logger(e){
