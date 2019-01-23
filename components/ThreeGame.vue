@@ -4,8 +4,9 @@
 
 <script>
 import * as Three from 'three'
-// import * as game from './game/game'
-// import * as interactions from './game/interactions'
+import Game from './game/game'
+import * as utils from './utils/timeout'
+
 import OrbitControls from 'orbit-controls-es6'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
@@ -13,11 +14,13 @@ export default {
   name: 'ThreeGame',
   data() {
     return {
+      loading: true,
       camera: null,
       scene: null,
       renderer: null,
       clock: null,
       controls: null,
+      game: null
     }
   },
   computed: {
@@ -31,25 +34,16 @@ export default {
   created: function(){
   },
   mounted() {
-    this.init();
-    this.animate();
+    this.init().then(()=>{
+      this.loading = false;
+      this.animate();
+    });
   },
   destroyed: function() {
     window.removeEventListener('resize', this.onWindowResize, false);
-    // window.removeEventListener('keyup', interactions.handleKeyUp, false);
-    // window.removeEventListener('keydown', interactions.handleKeyDown, false);
-    
-    // window.removeEventListener('mouseup', printEvents, false);
-    // window.removeEventListener('mousedown', printEvents, false);
-    // window.removeEventListener('mousemove', printEvents, false);
-
-    // window.removeEventListener('touchstart', printEvents, false);
-    // window.removeEventListener('touchend', printEvents, false);
-    // window.removeEventListener('touchcancel', printEvents, false);
-    // window.removeEventListener('touchmove', printEvents, false);
   },
   methods: {
-    init: function() {
+    init: async function() {
       let container = document.getElementById('three-container');
       let width = window.innerWidth;
       let height = window.innerHeight;
@@ -61,46 +55,29 @@ export default {
 	    this.renderer.setPixelRatio(window.devicePixelRatio);
       this.renderer.setSize(width, height);
 
-      this.camera.position.z = -2;
-      this.camera.position.y = 0;
-      this.camera.lookAt(0, 0, 0);
-      this.camera.position.x = 0;
+      this.camera.position.z = -7;
+      this.camera.position.y = 10;
+      this.camera.lookAt(0, 0, -7);
+      this.camera.position.x = -0.5;
 
       this.scene = new Three.Scene();
 
-      // game.initObjects(this.scene);
-      this.initializeObjects();
-
       container.appendChild(this.renderer.domElement);
       window.addEventListener('resize', this.onWindowResize, false);
-      // window.addEventListener('keyup', interactions.handleKeyUp, false);
-      // window.addEventListener('keydown', interactions.handleKeyDown, false);
-
-      // window.addEventListener('mousedown', printEvents, false);
-      // window.addEventListener('mouseup', printEvents, false);
-      // window.addEventListener('mousemove', printEvents, false);
-
-      // window.addEventListener('touchstart', printEvents, false);
-      // window.addEventListener('touchend', printEvents, false);
-      // window.addEventListener('touchcancel', printEvents, false);
-      // window.addEventListener('touchmove', printEvents, false);
-
-    },
-    initializeObjects: function() {
-      this.light = new Three.DirectionalLight(0xFFFFFF);
-      this.scene.add(this.light);
-
-      // let geometry = new Three.BoxGeometry(2, 2, 2);
-      let geometry = new Three.OctahedronBufferGeometry(2, 0);
-      let material = new Three.MeshPhongMaterial({color: '#00d0ff'});
-      this.mesh = new Three.Mesh(geometry, material);
-      this.scene.add(this.mesh);
+      
+      this.game = new Game();
+      this.game.initObjects(this.scene);
+      this.game.initInteractions();
+      this.game.removeInteractions();
     },
     animate: function() {
       requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
+      
       // let player = this.scene.getObjectByName("player");
       // interactions.handleMovement(delta, player, 8);
+      this.game.loop(this.scene, delta);
+
       this.renderer.render(this.scene, this.camera);
     },
     onWindowResize: function () {
