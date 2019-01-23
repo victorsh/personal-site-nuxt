@@ -43,8 +43,10 @@ export default {
       this.animate();
     });
   },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.onWindowResizeGame, false);
+  },
   destroyed: function() {
-    window.removeEventListener('resize', this.onWindowResize, false);
     this.game.removeInteractions();
 
     // Remove GL
@@ -83,8 +85,8 @@ export default {
       this.scene = new Three.Scene();
 
       container.appendChild(this.renderer.domElement);
-      window.addEventListener('resize', this.onWindowResize, false);
-      
+      window.addEventListener('resize', this.onWindowResizeGame, false);
+
       this.game = new Game();
       this.game.initObjects(this.scene);
       this.game.initInteractions();
@@ -101,12 +103,13 @@ export default {
       this.renderer.render(this.scene, this.camera);
       this.stats.end();
     },
-    onWindowResize: function () {
+    onWindowResizeGame: function () {
       let width = this.getWindowWidth();
       let height = this.getWindowHeight();
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
+      console.log('Game');
       this.renderer.setSize(width, height);
     },
     getWindowWidth: function() {

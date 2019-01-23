@@ -47,9 +47,13 @@ export default {
       this.loading = false;
       this.animate();
     });
+
+    
+  },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.onWindowResizeMain, false);
   },
   destroyed: function() {
-    document.removeEventListener('resize', this.onWindowResize, false);
     // Remove GL
     this.renderer.forceContextLoss();
     this.renderer.context = null;
@@ -120,8 +124,7 @@ export default {
       this.scene.add(mesh);
 
       container.appendChild(this.renderer.domElement);
-      window.addEventListener('resize', this.onWindowResize, false)
-
+      window.addEventListener('resize', this.onWindowResizeMain, false)
       // await utils.timeout(3000);
     },
     animate: function() {
@@ -162,12 +165,13 @@ export default {
         new THREE.TextureLoader().load(url, resolve);
       })
     },
-    onWindowResize: function () {
+    onWindowResizeMain: function () {
       let width = this.getWindowWidth();
       let height = this.getWindowHeight();
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
+      console.log('main');
       this.renderer.setSize(width, height);
     },
     getWindowWidth: function() {

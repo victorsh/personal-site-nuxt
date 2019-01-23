@@ -29,9 +29,6 @@ export default {
     }
   },
   beforeMount: function() {
-
-  },
-  created: function() {
     if(this.$route.path === '/'){
       this.isHome = true;
       this.isAbout = false;
@@ -45,6 +42,9 @@ export default {
       this.isAbout = false;
       this.isHome = false;
     }
+  },
+  beforeCreate: function() {
+
   },
   computed: {
     ...mapState([
