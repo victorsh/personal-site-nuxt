@@ -20,3 +20,6 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+#### Issues
+- Threejs animation loop persists between pages. Need to find a way to destroy on page switch.

@@ -33,7 +33,7 @@ Game.prototype.initObjects = function(scene) {
   // Init Main Floor
   let floorBase = new THREE.Mesh(
     new THREE.BoxGeometry(this.boardWidth, this.boardHeight - 2.1, 1), 
-    new THREE.MeshLambertMaterial({color: 0x42F4E2, side: THREE.DoubleSide})
+    new THREE.MeshLambertMaterial({color: 0x545a5b, side: THREE.DoubleSide})
   );
   floorBase.rotation.x = Math.PI/2;
   floorBase.position.z = -this.boardHeight/2 + 0.5 - 1.5;
@@ -45,7 +45,7 @@ Game.prototype.initObjects = function(scene) {
   // Init Play Floor
   let floorPlay = new THREE.Mesh(
     new THREE.BoxGeometry(this.boardWidth, 2.5, 1), 
-    new THREE.MeshLambertMaterial({color: 0x4C2300, side: THREE.DoubleSide})
+    new THREE.MeshLambertMaterial({color: 0xa3c2c6, side: THREE.DoubleSide})
   );
   floorPlay.rotation.x = Math.PI/2;
   floorPlay.position.z = -1.0;
@@ -64,10 +64,10 @@ Game.prototype.initObjects = function(scene) {
   scene.add(dirLight);
 
   // Initialize Coins and Obstacles
-  let coinGeom = new THREE.CylinderGeometry(0.20, 0.20, 0.1, 20, 32);
-  let coinMat = new THREE.MeshPhongMaterial({color: 0xFFF20C});
-  let boxGeom = new THREE.BoxGeometry(0.85, 0.85, 0.85);
-  let boxMat = new THREE.MeshPhongMaterial({color: 0x27AD35});
+  let coinGeom = new THREE.CylinderGeometry(0.20, 0.20, 0.05, 20, 32);
+  let coinMat = new THREE.MeshPhongMaterial({color: 0xFFF20C, opacity: 0.5, transparent: true});
+  let boxGeom = new THREE.BoxGeometry(0.85, 0.10, 0.85);
+  let boxMat = new THREE.MeshPhongMaterial({color: 0x27AD35, opacity: 0.7, transparent: true});
 
   for(let i = 0; i<this.boardWidth*this.boardHeight; i++){
     let coin = new THREE.Mesh(coinGeom, coinMat);
@@ -81,8 +81,8 @@ Game.prototype.initObjects = function(scene) {
     let obstacle = new THREE.Mesh(boxGeom, boxMat);
     obstacle.name = 'obstacle-'+i;
     this.disabledObstacles.push(obstacle.name);
-    obstacle.position.x = 5;
-    obstacle.position.y = -0.7;
+    obstacle.position.x = 1;
+    obstacle.position.y = -0.1;
     obstacle.position.z = -8;
     scene.add(obstacle);
   }
@@ -144,7 +144,21 @@ Game.prototype.loop = function(scene, delta) {
 Game.prototype.objectLogic = function(scene, delta) {
   
   for(let i = 0; i<this.boardWidth; i++){
+    let choice = Math.floor(Math.random() * 3);
+    console.log(choice)
+    switch(choice) {
+      case 0:
 
+      break;
+      case 1:
+
+      break;
+      case 2:
+
+      break;
+      default:
+        //
+    }
   }
 
   if(this.disabledObstacles.length !== 0){

@@ -19,6 +19,7 @@ export default {
       camera: null,
       scene: null,
       renderer: null,
+      reqAnim: null,
       clock: null,
       controls: null,
       accelerateCube: 0.01,
@@ -49,6 +50,12 @@ export default {
   },
   destroyed: function() {
     document.removeEventListener('resize', this.onWindowResize, false);
+    // Remove GL
+    this.renderer.forceContextLoss();
+    this.renderer.context = null;
+    this.renderer.domElement = null;
+    this.renderer = null;
+    cancelAnimationFrame(this.reqAnim);
   },
   methods: {
     loadTextures: async function() {
@@ -118,7 +125,7 @@ export default {
       // await utils.timeout(3000);
     },
     animate: function() {
-      requestAnimationFrame(this.animate);
+      this.reqAnim = requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
       let rtObject = this.scene.getObjectByName('rotator-object');
       let pointsSystem = this.scene.getObjectByName('the-particles');

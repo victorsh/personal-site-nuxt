@@ -22,7 +22,8 @@ export default {
       clock: null,
       controls: null,
       game: null,
-      stats: null
+      stats: null,
+      reqAnim: null,
     }
   },
   computed: {
@@ -34,6 +35,7 @@ export default {
     ])
   },
   created: function(){
+    this.currentPage = true;
   },
   mounted() {
     this.init().then(()=>{
@@ -44,6 +46,15 @@ export default {
   destroyed: function() {
     window.removeEventListener('resize', this.onWindowResize, false);
     this.game.removeInteractions();
+
+    // Remove GL
+    this.renderer.forceContextLoss();
+    this.renderer.context = null;
+    this.renderer.domElement = null;
+    this.renderer = null;
+
+    document.body.removeChild(this.stats.dom);
+    cancelAnimationFrame(this.reqAnim);
   },
   methods: {
     init: async function() {
@@ -80,7 +91,7 @@ export default {
     },
     animate: function() {
       this.stats.begin();
-      requestAnimationFrame(this.animate);
+      this.reqAnim = requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
       
       // let player = this.scene.getObjectByName("player");
