@@ -16,8 +16,6 @@ function Game() {
   this.enabledCoins = [];
   this.disabledObstacles = [];
   this.enabledObstacles = [];
-
-
 }
 
 Game.prototype.initObjects = function(scene) {
@@ -117,6 +115,7 @@ Game.prototype.removeInteractions = function(){
 }
 
 Game.prototype.loop = function(scene, delta) {
+  // Run game logic based on time interval
   this.timeDiff += delta;
   if(this.timeDiff > this.genInterval) {
     this.objectLogic(scene, delta);
@@ -165,6 +164,36 @@ function logger(e){
   console.log(e);
 }
 
+function checkCollision(object1, object2){
+  // Calculate min and max of both objects
+  let obDim, obxmin, obxmax, obzmin, obzmax, obymin, obymax;
+  object1.geometry.computeBoundingBox();
+  obDim = object1.geometry.boundingBox;
+  obxmin = object1.position.x - obDim.max.x;
+  obxmax = object1.position.x + obDim.max.x;
+  obzmin = object1.position.z - obDim.max.z;
+  obzmax = object1.position.z + obDim.max.z;
+  obymin = object1.position.y - obDim.max.y;
+  obymax = object1.position.y + obDim.max.y;
 
+  let playerDim, cbxmin, cbxmax, cbzmin, cbzmax, cbymin, cbymax;
+  object2.geometry.computeBoundingBox();
+  playerDim = object2.geometry.boundingBox;
+  cbxmin = object2.position.x - playerDim.max.x;
+  cbxmax = object2.position.x + playerDim.max.x;
+  cbzmin = object2.position.z - playerDim.max.z;
+  cbzmax = object2.position.z + playerDim.max.z;
+  cbymin = object2.position.y - playerDim.max.y;
+  cbymax = object2.position.y + playerDim.max.y;
+  
+  // Collision Logic
+  if((obxmin <= cbxmax && obxmax >= cbxmin)&&
+      (obzmin <= cbzmax && obzmax >= cbzmin)&&
+      (obymin <= cbymax && obymax >= cbymin)){
+      return true;
+  } else {
+      return false;
+  }
+}
 
 export default Game;
