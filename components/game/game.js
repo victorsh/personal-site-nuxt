@@ -136,6 +136,7 @@ Game.prototype.loop = function(scene, delta) {
       coin.position.z += this.speed * delta;
       if (coin.position.z > 1){
         coin.position.z = -15;
+        this.disableCoin(scene);
       }
     }
     
@@ -143,6 +144,7 @@ Game.prototype.loop = function(scene, delta) {
     obstacle.position.z += this.speed * delta;
     if(obstacle.position.z > 1) {
       obstacle.position.z = -15;
+      this.disabledObstacle(scene);
     }
   }
 }
@@ -167,12 +169,27 @@ Game.prototype.objectLogic = function(scene, delta) {
     }
   }
 
+  this.enableObstacle(scene);
+  this.enableCoin(scene);
+}
+
+Game.prototype.enableObstacle = function(scene) {
   if(this.disabledObstacles.length !== 0){
     let obstacleName = this.disabledObstacles.pop();
     let obstacle = scene.getObjectByName(obstacleName);
     this.enabledObstacles.push(obstacleName);
   }
+}
 
+Game.prototype.disabledObstacle = function(scene) {
+  if(this.enabledObstacles.length !== 0){
+    let obstacleName = this.enabledObstacles.pop();
+    let obstacle = scene.getObjectByName(obstacleName);
+    this.disabledObstacles.push(obstacleName);
+  }
+}
+
+Game.prototype.enableCoin = function(scene) {
   if(this.disabledCoins.length !== 0){
     let coinName = this.disabledCoins.pop();
     let coin = scene.getObjectByName(coinName);
@@ -180,20 +197,12 @@ Game.prototype.objectLogic = function(scene, delta) {
   }
 }
 
-Game.prototype.enableObstacle = function(scene) {
-
-}
-
-Game.prototype.disabledObstacle = function(scene) {
-
-}
-
-Game.prototype.enableCoin = function(scene) {
-
-}
-
 Game.prototype.disableCoin = function(scene) {
-  
+  if(this.enabledCoins.length !== 0){
+    let coinName = this.enabledCoins.pop();
+    let coin = scene.getObjectByName(coinName);
+    this.disabledCoins.push(coinName);
+  }
 }
 
 function logger(e){
