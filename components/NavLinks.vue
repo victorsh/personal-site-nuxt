@@ -9,8 +9,8 @@
     <nuxt-link to="/about">
       <button type="button" class='btn btn-outline-info btn-sm'>About</button>
     </nuxt-link>
-    <!-- <nuxt-link to="/blog">
-      <button type="button" class='btn btn-outline-info btn-sm'>Blog</button>
+    <!-- <nuxt-link to="/projects">
+      <button type="button" class='btn btn-outline-info btn-sm'>Projects</button>
     </nuxt-link> -->
   </div>
 </template>

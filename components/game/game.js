@@ -88,6 +88,9 @@ Game.prototype.initObjects = function(scene) {
   }
 }
 
+// Create event listeners
+// Make sure to modify this to create event listeners based
+// on whether or not the user is on mobile or desktop
 Game.prototype.initInteractions = function(){
   window.addEventListener('keydown', logger, false);
   window.addEventListener('keyup', logger, false);
@@ -101,6 +104,7 @@ Game.prototype.initInteractions = function(){
   // window.removeEventListener('touchmove', printEvents, false);
 }
 
+// Remove event listeners before switching pages
 Game.prototype.removeInteractions = function(){
   window.removeEventListener('keydown', logger, false);
   window.removeEventListener('keyup', logger, false);
@@ -114,6 +118,8 @@ Game.prototype.removeInteractions = function(){
   // window.addEventListener('touchmove', printEvents, false);
 }
 
+// Main game loop, passed in through animate function on
+// game component
 Game.prototype.loop = function(scene, delta) {
   // Run game logic based on time interval
   this.timeDiff += delta;
