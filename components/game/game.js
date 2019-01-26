@@ -154,10 +154,10 @@ Game.prototype.objectLogic = function(scene, delta) {
     console.log(choice)
     switch(choice) {
       case 0:
-
+        // create block
       break;
       case 1:
-
+        // create coin
       break;
       case 2:
 
@@ -178,6 +178,22 @@ Game.prototype.objectLogic = function(scene, delta) {
     let coin = scene.getObjectByName(coinName);
     this.enabledCoins.push(coinName);
   }
+}
+
+Game.prototype.enableObstacle = function(scene) {
+
+}
+
+Game.prototype.disabledObstacle = function(scene) {
+
+}
+
+Game.prototype.enableCoin = function(scene) {
+
+}
+
+Game.prototype.disableCoin = function(scene) {
+  
 }
 
 function logger(e){
