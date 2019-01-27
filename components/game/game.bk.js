@@ -1,8 +1,3 @@
-/* Notes 
- * {Isuues}
- * - Noticing slight jitter on gameplay, does not seem to effect FPS counter
- */
-
 import * as THREE from 'three';
 
 function Game() {
@@ -17,10 +12,10 @@ function Game() {
   this.health = 3;
   this.coinsCollected = 0;
   
-  this.disabledCoins = new Set();
-  this.enabledCoins = new Set();
-  this.disabledObstacles = new Set();
-  this.enabledObstacles = new Set();
+  this.disabledCoins = [];
+  this.enabledCoins = [];
+  this.disabledObstacles = [];
+  this.enabledObstacles = [];
 
   this.leftOn = false;
   this.rightOn = false;
@@ -38,7 +33,7 @@ Game.prototype.initObjects = function(scene) {
     new THREE.MeshLambertMaterial( {color: 0xFF0000})
   );
   player.position.x = 1;
-  player.position.y = -0.1;
+  player.position.y = -0.60;
   player.geometry.computeBoundingBox();
   player.name = 'player';
   scene.add( player );
@@ -78,24 +73,24 @@ Game.prototype.initObjects = function(scene) {
 
   // Initialize Coins and Obstacles
   let coinGeom = new THREE.CylinderGeometry(0.20, 0.20, 0.05, 20, 32);
-  let coinMat = new THREE.MeshPhongMaterial({color: 0xFFF20C, opacity: 1.0, transparent: true});
+  let coinMat = new THREE.MeshPhongMaterial({color: 0xFFF20C, opacity: 0.5, transparent: true});
   let boxGeom = new THREE.BoxGeometry(0.85, 0.10, 0.85);
-  let boxMat = new THREE.MeshPhongMaterial({color: 0x27AD35, opacity: 1.0, transparent: true});
+  let boxMat = new THREE.MeshPhongMaterial({color: 0x27AD35, opacity: 0.7, transparent: true});
 
   for(let i = 0; i<this.boardWidth*this.boardHeight; i++){
     let coin = new THREE.Mesh(coinGeom, coinMat);
     coin.name = 'coin-'+i;
-    this.disabledCoins.add(coin.name);
+    this.disabledCoins.push(coin.name);
     coin.position.x = -3;
-    coin.position.y = -0.01;
+    coin.position.y = -0.1;
     coin.position.z = -16;
     scene.add(coin);
 
     let obstacle = new THREE.Mesh(boxGeom, boxMat);
     obstacle.name = 'obstacle-'+i;
-    this.disabledObstacles.add(obstacle.name);
+    this.disabledObstacles.push(obstacle.name);
     obstacle.position.x = -4;
-    obstacle.position.y = -0.01;
+    obstacle.position.y = -0.1;
     obstacle.position.z = -16;
     scene.add(obstacle);
   }
@@ -135,57 +130,48 @@ Game.prototype.removeInteractions = function(){
 // game component
 Game.prototype.loop = function(scene, delta) {
   if(!this.pause){
-
-    this.handleMovement(scene, delta);
-
     // Run game logic based on time interval
     this.timeDiff += delta;
     if(this.timeDiff > this.genInterval) {
-      this.addRow(scene); // <-- Add new objects
+      this.addRow(scene);
       this.timeDiff = 0;
     }
 
-    let player = scene.getObjectByName('player');
-    for(let value of this.enabledObstacles){
-      let obstacle = scene.getObjectByName(value);
+    // Handle Animation and Collision of Obstacles
+    let disableSelectedObstacles = [];
+    for(let i = 0; i<this.enabledObstacles.length; i++){
+      
+      let obstacle = scene.getObjectByName(this.enabledObstacles[i]);
       obstacle.position.z += this.speed * delta;
-
-      if(obstacle.position.z > 1){
+      if(obstacle.position.z > 1) {
         obstacle.position.z = -16;
-        this.enabledObstacles.delete(value); // <-- Remove Obstacle
-        this.disabledObstacles.add(value);
-      } else {
-        let collided = this.checkCollision(obstacle, player);
-        if(collided) {
-          obstacle.position.z = -16;
-          this.enabledObstacles.delete(value); // <-- Remove Obstacle
-          this.disabledObstacles.add(value);
-        }
+        disableSelectedObstacles.push(i);
       }
     }
+    
+    for(let i = 0; i<disableSelectedObstacles.length; i++){
+      this.disableObstacle(scene);
+    }
 
-    for(let value of this.enabledCoins){
-      let coin = scene.getObjectByName(value);
+    // Handle Animation and Collision of coins
+    let disableSelectedCoins = []
+    for(let i = 0; i<this.enabledCoins.length; i++) {
+
+      let coin = scene.getObjectByName(this.enabledCoins[i]);
       coin.position.z += this.speed * delta;
-
-      if(coin.position.z > 1){
+      if (coin.position.z > 1){
         coin.position.z = -16;
-        this.enabledCoins.delete(value); // <-- Remove Obstacle
-        this.disabledCoins.add(value);
-      } else {
-        let collided = this.checkCollision(coin, player);
-        if(collided){
-          coin.position.z = -16;
-          this.enabledCoins.delete(value); // <-- Remove Obstacle
-          this.disabledCoins.add(value);
-        }
+        disableSelectedCoins.push(i);
       }
+    }
+    
+    for(let i = 0; i<disableSelectedCoins.length; i++){
+      this.disableCoin(scene);
     }
 
   }
 }
 
-// Adds new row to game scene by randomly selecting Obstacles/Coins/Empty
 Game.prototype.addRow = function(scene) {
 
   // Add next row to game scene
@@ -195,27 +181,60 @@ Game.prototype.addRow = function(scene) {
     let difficulty = 0.70
 
     if(choice > 0 && choice < difficulty && obstacleCount !== 7){
-      let objArr = Array.from(this.disabledObstacles);
-      this.disabledObstacles.delete(objArr[0]);
-      this.enabledObstacles.add(objArr[0]);
-
-      let obstacle = scene.getObjectByName(objArr[0]);
+      let obstacle = this.enableObstacle(scene);
       obstacle.position.x = -4 + i;
       obstacle.position.z = -14;
       obstacleCount++;
     } else if (choice >= difficulty && choice < 0.95 || obstacleCount === 7){
       // do nothing
     } else {
-      let coinArr = Array.from(this.disabledCoins);
-      this.disabledCoins.delete(coinArr[0]);
-      this.enabledCoins.add(coinArr[0]);
-
-      let coin = scene.getObjectByName(coinArr[0]);
+      let coin = this.enableCoin(scene);
       coin.position.x = -4 + i;
       coin.position.z = -14;
     }
   }
 
+}
+
+/************** Enable/Disable Objects **********************/
+// Obstacles
+Game.prototype.enableObstacle = function(scene) {
+  if(this.disabledObstacles.length !== 0){
+    let obstacleName = this.disabledObstacles.pop();
+    let obstacle = scene.getObjectByName(obstacleName);
+    this.enabledObstacles.push(obstacleName);
+    return obstacle;
+  }
+}
+
+Game.prototype.disableObstacle = function(scene) {
+  if(this.enabledObstacles.length !== 0){
+    let obstacleName = this.enabledObstacles[0];
+    this.enabledObstacles.shift();
+    let obstacle = scene.getObjectByName(obstacleName);
+    this.disabledObstacles.unshift(obstacleName);
+    return obstacle;
+  }
+}
+
+// Coins
+Game.prototype.enableCoin = function(scene) {
+  if(this.disabledCoins.length !== 0){
+    let coinName = this.disabledCoins.pop();
+    let coin = scene.getObjectByName(coinName);
+    this.enabledCoins.push(coinName);
+    return coin;
+  }
+}
+
+Game.prototype.disableCoin = function(scene) {
+  if(this.enabledCoins.length !== 0){
+    let coinName = this.enabledCoins[0];
+    this.enabledCoins.shift();
+    let coin = scene.getObjectByName(coinName);
+    this.disabledCoins.unshift(coinName);
+    return coin
+  }
 }
 
 /**************** Utility Functions ******************************/
@@ -293,41 +312,6 @@ Game.prototype.handleKeyUp = function(e){
   }
 
   // console.log(this.leftOn, this.rightOn, this.upOn, this.downOn);
-}
-
-Game.prototype.handleMovement = function(scene, delta) {
-  let player = scene.getObjectByName('player');
-  let moveSpeed = 4;
-  if(this.leftOn || this.rightOn || this.upOn || this.downOn){
-      if(this.leftOn){
-          if(player.position.x > -this.boardWidth/2 - 0.3){
-              player.position.x -= moveSpeed * delta;
-          } else {
-              player.position.x = -this.boardWidth/2 - 0.3;
-          }
-      }
-      if(this.rightOn){
-          if(player.position.x < this.boardWidth/2 - 0.7){
-              player.position.x += moveSpeed * delta;
-          } else {
-              player.position.x = this.boardWidth/2 - 0.7;
-          }
-      }
-      if(this.upOn){
-          if(player.position.z > -2.3){
-              player.position.z -= moveSpeed * delta;
-          } else {
-              player.position.z = -2.3;
-          }
-      }
-      if(this.downOn){
-          if(player.position.z < 0){
-              player.position.z += moveSpeed * delta;
-          } else {
-              player.position.z = 0;
-          }
-      }
-  }
 }
 
 export default Game;

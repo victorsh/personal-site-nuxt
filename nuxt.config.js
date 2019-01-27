@@ -15,7 +15,8 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'manifest', href: 'manifest.json'}
     ]
   },
 
@@ -29,29 +30,6 @@ module.exports = {
   */
   css: [
   ],
-
-  manifest: {
-    "short_name": "VS",
-    "name": "Victor Shahbazian",
-    "icons": [
-      {
-        "src": "/icons/apple-icon-180x180.png",
-        "type": "image/png",
-        "sizes": "180x180"
-      },
-      {
-        "src": "/icons/apple-icon.png",
-        "type": "image/png",
-        "sizes": "512x512"
-      }
-    ],
-    "start_url": "/",
-    "background_color": "#FFFFFF",
-    "display": "standalone",
-    "scope": "/",
-    "theme_color": "#FFFFFF",
-    "orientation": "any"
-  },
 
   /*
   ** Plugins to load before mounting the App
