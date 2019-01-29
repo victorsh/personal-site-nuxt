@@ -1,8 +1,8 @@
 <template>
-  <section class="container">
+  <section class="container-fluid">
     <three-game/>
-    <div class='under-construction'>
-      Game is under construction, come back soon!
+    <div class='under-construction noselect'>
+      Game is currently being developed, please come back soon!
     </div>
     <nav-links/>
   </section>
@@ -43,74 +43,19 @@ export default {
     },
     switchPage: function(page) {
       this.$store.commit('setPageState', page)
-    }
+    },
   }
 }
 </script>
 
 <style>
-#main {
-  position: relative;
-  z-index: 1;
-}
 
-#navi{
-  position: relative;
-  z-index: 1;
-}
-
-.container {
+.container-fluid {
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-.container h2 {
-  font-size: 32px;
-}
-
-.container h5 {
-  font-size: 20px;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #fff6d6;
-  letter-spacing: 1px;
-}
-
-.pulsate {
-  -webkit-animation: pulsate 3s ease-in-out;
-  animation: pulsate 3s ease-out;
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
-  opacity: 0.1;
-}
-
-@keyframes pulsate {
-  0% {
-    opacity: 0.1;
-  }
-  50% {
-    opacity: 1.0;
-  }
-  100% {
-    opacity: 0.1;
-  }
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #fff9e5;
-  word-spacing: 5px;
-  padding-bottom: 15px;
 }
 
 .noselect {

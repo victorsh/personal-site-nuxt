@@ -117,6 +117,9 @@ export default {
       } else if (this.$route.path === '/about') {
         geometry = new THREE.IcosahedronBufferGeometry(2, 0);
         material = new THREE.MeshPhongMaterial({color: '#1eff8b', wireframe: true});
+      } else if (this.$route.path === '/projects') {
+        geometry = new THREE.SphereBufferGeometry(5, 32, 32);
+        material = new THREE.MeshPhongMaterial({color: '#f44b42', wireframe: true});
       }
       
       let mesh = new THREE.Mesh(geometry, material);
