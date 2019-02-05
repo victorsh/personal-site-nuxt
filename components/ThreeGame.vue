@@ -1,13 +1,46 @@
 <template>
   <div>
     <div id="game-stats">
-      <img src='/heart-icon.png' width="16px" height="16px" /><div id="player-health"></div>
-      <img src='/coin-icon.png' width="16px" height="16px" /><div id="player-coins"></div>
-      <div id="player-distance"></div>
+      <img src='/heart-icon.png' width="16px" height="16px" /><div id="player-health">{{health}}</div>
+      <img src='/coin-icon.png' width="16px" height="16px" /><div id="player-coins">{{coins}}</div>
+      <div id="player-distance">Distance {{distance}}</div>
     </div>
-    <button id="pause-button" type="button" @click.prevent="pauseGame" class='btn btn-outline-danger btn-sm'>Pause</button>
+    <button id="pause-button" type="button" @click.prevent="showPauseGame" class='btn btn-outline-danger btn-sm'>Pause</button>
     <button id="speed-button" type="button" class='btn btn-outline-success btn-sm'>speed</button>
     <div id="three-container"></div>
+
+    <!-- Pop-up windows -->
+    <b-modal ref="startGame" 
+      no-close-on-backdrop="true" 
+      no-close-on-esc="true" 
+      hide-header-close="true" 
+      hide-footer centered title="StartGame"
+    >
+      <p class="my-4">The objective of the game is to last as long as possible by keeping health above -1.</p>
+      <p class="my-4">You lose health when you hit the green blocks.</p>
+      <p class="my-4">The final score is determined by the number of coins collected and distance traveled.</p>
+      <b-btn class="mt-3" variant="outline-success" block @click="hideStartGamePlay">Start Game</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="hideStartGameExit">Exit Game</b-btn>
+    </b-modal>
+
+    <b-modal 
+      ref="pauseGame" 
+      no-close-on-backdrop="true" 
+      no-close-on-esc="true" 
+      hide-header-close="true" 
+      hide-footer centered title="Game Paused"
+    >
+      <p>The game is paused</p>
+      <b-btn class="mt-3" variant="outline-success" block @click="hidePauseGamePlay">Continue Game</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="hidePauseGameExit">Exit Game</b-btn>
+    </b-modal>
+
+    <b-modal ref="gameOver" hide-footer centered title="Game-Over">
+      <p class="my-4">Score = Coins: {{this.coins}} X 100 + Distance: {{this.distance}} = {{this.coins*100 + this.distance}}
+      <p class="my-4">Try Again?</p>
+      <b-btn class="mt-3" variant="outline-success" block @click="hideGameOverPlay">Try Again</b-btn>
+      <b-btn class="mt-3" variant="outline-danger" block @click="hideGameOverExit">Exit</b-btn>
+    </b-modal>
   </div>
 </template>
 
@@ -33,6 +66,9 @@ export default {
       game: null,
       stats: null,
       reqAnim: null,
+      health: 3,
+      coins: 0,
+      distance: 0
     }
   },
   computed: {
@@ -49,32 +85,25 @@ export default {
   mounted() {
     this.init().then(()=>{
       this.loading = false;
-      
-      // Load UI
-      let gameStats = document.querySelector('#game-stats');
-      gameStats.style.top = this.getWindowHeight()/8 + 'px';
-
-      let playerHealth = document.querySelector('#player-health');
-      playerHealth.innerHTML = this.game.getHealth();
-
-      let playerCoins = document.querySelector('#player-coins');
-      playerCoins.innerHTML = this.game.getCoins();
-
-      let playerDistance = document.querySelector('#player-distance');
-      playerDistance.innerHTML = 'Distance: ' + this.game.getDistance();
 
       let speedButton = document.querySelector('#speed-button');
       speedButton.style.top = this.getWindowHeight() - 50 + 'px';
+
+      let pauseButton = document.querySelector('#pause-button');
+      pauseButton.style.top = this.getWindowHeight() - 50 + 'px';
+      pauseButton.style.left = this.getWindowWidth() - pauseButton.offsetLeft*7 + 'px';
+
       speedButton.addEventListener('mousedown', this.speedUpGame, false);
       speedButton.addEventListener('mouseup', this.slowDownGame, false);
       speedButton.addEventListener('touchstart', this.speedUpGame, false);
       speedButton.addEventListener('touchend', this.slowDownGame, false);
 
-      let pauseButton = document.querySelector('#pause-button');
-      pauseButton.style.top = this.getWindowHeight() - 50 + 'px';
-      pauseButton.style.left = this.getWindowWidth() - pauseButton.offsetLeft*7 + 'px';
       // Start Animating
       this.animate();
+      // Pause the Game
+      this.pauseGame();
+      // Display Start Screen
+      this.showStartGame();
     });
   },
   beforeDestroy: function() {
@@ -82,7 +111,6 @@ export default {
     window.removeEventListener('obstacle-collided', this.handleObstacleCollision, false);
     window.removeEventListener('coin-collided', this.handleObstacleCollision, false);
     window.removeEventListener('distance-update', this.handleUpdateDistance, false);
-    window.removeEventListener('game-over', this.handleGameOver, false);
   },
   destroyed: function() {
     this.game.removeInteractions();
@@ -97,6 +125,7 @@ export default {
     cancelAnimationFrame(this.reqAnim);
   },
   methods: {
+    // ---------------------------------------------------> Threejs Commands
     init: async function() {
       
       // Enable Stats
@@ -129,7 +158,6 @@ export default {
       window.addEventListener('obstacle-collided', this.handleObstacleCollision, false);
       window.addEventListener('coin-collided', this.handleCoinCollision, false);
       window.addEventListener('distance-update', this.handleUpdateDistance, false);
-      window.addEventListener('game-over', this.handleGameOver, false);
 
       this.game = new Game();
       this.game.initObjects(this.scene);
@@ -179,6 +207,7 @@ export default {
     getWindowHeight: function() {
       return window.innerHeight;
     },
+    // ---------------------------------------------------> Game Commands
     pauseGame: function(e) {
       this.game.pauseGame();
     },
@@ -191,33 +220,66 @@ export default {
       this.game.slowDownGame();
     },
     resetGame: function() {
-      this.handleObstacleCollision();
-      this.handleCoinCollision();
-      this.handleUpdateDistance();
+      this.game.reset(this.scene);
+      this.health = 3;
+      this.coins = 0;
+      this.distance = 0;
+      this.pauseGame();
     },
     handleObstacleCollision: function() {
       let health = this.game.decreaseHealth();
-      let playerHealth = document.querySelector('#player-health');
-      playerHealth.innerHTML = health;
+      this.health = health;
+      if(health < 0){
+        this.showGameOver();
+      }
     },
     handleCoinCollision: function() {
       let coins = this.game.increaseCoins();
-      let playerCoins = document.querySelector('#player-coins');
-      playerCoins.innerHTML = coins;
+      this.coins = coins;
     },
     handleUpdateDistance: function() {
       let distance = this.game.getDistance();
-      let playerDistance = document.querySelector('#player-distance');
-      playerDistance.innerHTML = 'Distance: ' + distance;
+      this.distance = distance;
     },
     handleGameOver: function() {
-      console.log('game over!');
+      this.showGameOver();
+    },
+    // ---------------------------------------------------> Modal Commands
+    showStartGame: function() {
+      this.$refs.startGame.show();
+    },
+    hideStartGamePlay: function() {
+      this.$refs.startGame.hide();
+      this.pauseGame();
+    },
+    hideStartGameExit: function() {
+      this.$refs.startGame.hide();
+      this.pauseGame();
+    },
+    showPauseGame: function() {
+      this.$refs.pauseGame.show();
+      this.pauseGame();
+    },
+    hidePauseGamePlay: function() {
+      this.$refs.pauseGame.hide();
+      this.pauseGame();
+    },
+    hidePauseGameExit: function() {
+      this.$refs.pauseGame.hide();
+      this.pauseGame();
+    },
+    showGameOver: function() {
+      this.$refs.gameOver.show();
+      this.pauseGame();
+    },
+    hideGameOverPlay: function() {
+      this.resetGame()
+      this.$refs.gameOver.hide();
+    },
+    hideGameOverExit: function() {
+      this.$refs.gameOver.hide();
     }
   }
-}
-
-function printEvents(e) {
-  console.log(e);
 }
 </script>
 
@@ -244,7 +306,7 @@ function printEvents(e) {
 
   #game-stats {
     position: fixed;
-    width: 100%;
+    top: 100px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -265,5 +327,12 @@ function printEvents(e) {
 
   #player-distance {
 
+  }
+
+  .z-fixed {
+    position: fixed;
+    z-index: 2;
+    top: 100px;
+    left:100px;
   }
 </style>

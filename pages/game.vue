@@ -1,9 +1,6 @@
 <template>
   <section class="container-fluid">
     <three-game/>
-    <div class='under-construction noselect'>
-      Game is currently being developed, please come back soon!
-    </div>
     <nav-links/>
   </section>
 </template>

@@ -22,13 +22,14 @@ function Game() {
   this.holdSpeed = 3;
   this.playerSpeed = 4;
   this.genInterval = 2;
-  this.totalDistance = 0;
-
+  
   this.boardHeight = 12;
   this.boardWidth = 8;
+  this.resetPosition = -16;
   
   this.health = 3;
   this.coinsCollected = 0;
+  this.totalDistance = 0;
   
   this.disabledCoins = new Set();
   this.enabledCoins = new Set();
@@ -48,11 +49,14 @@ function Game() {
   this.obstacleCollision = new Event('obstacle-collided');
   this.coinCollision = new Event('coin-collided');
   this.distanceUpdate = new Event('distance-update');
-  this.gameOver = new Event('game-over');
 }
 
-Game.prototype.resetGame = function() {
-
+Game.prototype.reset = function(scene) {
+  this.health = 3;
+  this.coinsCollected = 0;
+  this.totalDistance = 0;
+  this.resetObstacles(scene);
+  this.resetCoins(scene);
 }
 
 Game.prototype.initObjects = function(scene) {
@@ -113,7 +117,7 @@ Game.prototype.initObjects = function(scene) {
     this.disabledCoins.add(coin.name);
     coin.position.x = -3;
     coin.position.y = -0.01;
-    coin.position.z = -16;
+    coin.position.z = this.resetPosition;
     scene.add(coin);
 
     let obstacle = new THREE.Mesh(boxGeom, boxMat);
@@ -121,7 +125,7 @@ Game.prototype.initObjects = function(scene) {
     this.disabledObstacles.add(obstacle.name);
     obstacle.position.x = -4;
     obstacle.position.y = -0.01;
-    obstacle.position.z = -16;
+    obstacle.position.z = this.resetPosition;
     scene.add(obstacle);
   }
 }
@@ -181,14 +185,14 @@ Game.prototype.loop = function(scene, delta) {
       obstacle.position.z += this.speed * delta;
 
       if(obstacle.position.z > 1){
-        obstacle.position.z = -16;
+        obstacle.position.z = this.resetPosition;
         this.enabledObstacles.delete(value); // <-- Remove Obstacle
         this.disabledObstacles.add(value);
       } else {
         let collided = this.checkCollision(obstacle, player);
         if(collided) {
           window.dispatchEvent(this.obstacleCollision); // <-- Dispatch Event
-          obstacle.position.z = -16;
+          obstacle.position.z = this.resetPosition;
           this.enabledObstacles.delete(value); // <-- Remove Obstacle
           this.disabledObstacles.add(value);
         }
@@ -200,20 +204,38 @@ Game.prototype.loop = function(scene, delta) {
       coin.position.z += this.speed * delta;
 
       if(coin.position.z > 1){
-        coin.position.z = -16;
+        coin.position.z = this.resetPosition;
         this.enabledCoins.delete(value); // <-- Remove Obstacle
         this.disabledCoins.add(value);
       } else {
         let collided = this.checkCollision(coin, player);
         if(collided){
           window.dispatchEvent(this.coinCollision); // <-- Dispatch Event
-          coin.position.z = -16;
+          coin.position.z = this.resetPosition;
           this.enabledCoins.delete(value); // <-- Remove Obstacle
           this.disabledCoins.add(value);
         }
       }
     }
 
+  }
+}
+
+Game.prototype.resetObstacles = function(scene) {
+  for(let value of this.enabledObstacles){
+    let obstacle = scene.getObjectByName(value);
+    obstacle.position.z = this.resetPosition;
+    this.enabledObstacles.delete(value);
+    this.disabledObstacles.add(value);
+  }
+}
+
+Game.prototype.resetCoins = function(scene) {
+  for(let value of this.enabledCoins){
+    let coin = scene.getObjectByName(value);
+    coin.position.z = this.resetPosition;
+    this.enabledCoins.delete(value);
+    this.disabledCoins.add(value);
   }
 }
 
@@ -249,13 +271,12 @@ Game.prototype.addRow = function(scene) {
   }
 }
 
-// UI Binding
+// -------------------------------------------------> UI Bindings
 Game.prototype.decreaseHealth = function() {
   this.health--;
   return this.health;
 }
 
-// UI Binding
 Game.prototype.increaseCoins = function() {
   this.coinsCollected++;
   return this.coinsCollected;
