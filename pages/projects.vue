@@ -5,6 +5,38 @@
     
     <div id='main'>
       <div class='sub-row'>
+
+        <div class='card' style='width: 18rem;'>
+          <img class='card-img-top' src='/game_gif.gif' width="286px" height="180px" alt='game card'>
+          <div class='card-body'>
+            <h5 class='card-title'>Blocks Down</h5>
+            <p class='card-text'>A procedurally generated infinite runner.</p>
+            <a href='#' class='btn btn-primary'>Visit</a>
+          </div>
+        </div>
+
+        <div class='card' style='width: 18rem;'>
+          <img class='card-img-top' src='/cyclone_gif.gif' width="286px" height="180px" alt='cyclone card'>
+          <div class='card-body'>
+            <h5 class='card-title'>Cyclone Distributor's Inc.</h5>
+            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
+            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class='sub-row'>
+
+        <div class='card' style='width: 18rem;'>
+          <img class='card-img-top' src='/saturn_chat_gif.gif' alt='saturn chat card'>
+          <div class='card-body'>
+            <h5 class='card-title'>Saturn Chat</h5>
+            <p class='card-text'>A 3D chat-room experience</p>
+            <a href='http://saturnchat.com' class='btn btn-primary'>Visit</a>
+          </div>
+        </div>
+
         <div class='card' style='width: 18rem;'>
           <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
           <div class='card-body'>
@@ -13,14 +45,7 @@
             <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
           </div>
         </div>
-        <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
-          <div class='card-body'>
-            <h5 class='card-title'>Some Project</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
-            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
-          </div>
-        </div>
+
       </div>
 
       <div class='sub-row'>
@@ -32,25 +57,7 @@
             <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
           </div>
         </div>
-        <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
-          <div class='card-body'>
-            <h5 class='card-title'>Some Project</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
-            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
-          </div>
-        </div>
-      </div>
 
-      <div class='sub-row'>
-        <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
-          <div class='card-body'>
-            <h5 class='card-title'>Some Project</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
-            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
-          </div>
-        </div>
         <div class='card' style='width: 18rem;'>
           <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
           <div class='card-body'>
@@ -161,12 +168,14 @@ export default {
 
 .sub-row {
   display:flex;
+  flex-direction: column;
   padding: 1%;
 }
 
 .card {
-  opacity: 0.7;
+  opacity: 0.9;
   margin-right: 2%;
+  margin-bottom: 2%;
 }
 
 @keyframes pulsate {
