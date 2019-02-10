@@ -9,10 +9,10 @@
         <div class='card' style='width: 18rem;'>
           <img class='card-img-top' src='/game_gif.gif' width="286px" height="180px" alt='game card'>
           <div class='card-body'>
-            <h5 class='card-title'>Blocks Down (Beta)</h5>
+            <h5 class='card-title'>Blocks Down</h5>
             <p class='card-text'>A procedurally generated block dodge game. Currently in Beta.</p>
             <nuxt-link to="/game">
-              <button type="button" class='btn btn-primary btn-sm'>Visit</button>
+              <button type="button" class='btn btn-primary'>Visit</button>
             </nuxt-link>
           </div>
         </div>
@@ -21,7 +21,7 @@
           <img class='card-img-top' src='/cyclone_gif.gif' width="286px" height="180px" alt='cyclone card'>
           <div class='card-body'>
             <h5 class='card-title'>Cyclone Distributor's Inc.</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
+            <p class='card-text'>E-Commerce site built with wordpress and woocommerce.</p>
             <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
           </div>
         </div>
@@ -34,7 +34,7 @@
           <img class='card-img-top' src='/saturn_chat_gif.gif' width="286px" height="180px" alt='saturn-chat card'>
           <div class='card-body'>
             <h5 class='card-title'>Saturn Chat</h5>
-            <p class='card-text'>A 3D chat-room experience</p>
+            <p class='card-text'>A 3D interactive chat-room experience built using A-Frame.</p>
             <a href='http://saturnchat.com' class='btn btn-primary'>Visit</a>
           </div>
         </div>
@@ -42,7 +42,7 @@
         <div class='card' style='width: 18rem;'>
           <img class='card-img-top' src='/stream_graph_gif.gif' width="286px" height="180px" alt='stream-graph card'>
           <div class='card-body'>
-            <h5 class='card-title'>Some Project</h5>
+            <h5 class='card-title'>Threejs Stream Graph</h5>
             <p class='card-text'>Coursework to display data as a stream graph.</p>
             <a href='https://sad-einstein-467d18.netlify.com/' class='btn btn-primary'>Visit</a>
           </div>
@@ -78,7 +78,6 @@ export default {
     }
   },
   created: function() {
-    console.log(this.$device.isDesktop);
     this.$device.isDesktop ? this.isDesktop = true : this.isDesktop = false;
   },
   computed: {
@@ -142,26 +141,6 @@ export default {
   margin-bottom: 2%;
 }
 
-@keyframes pulsate {
-  0% {
-    opacity: 0.1;
-  }
-  50% {
-    opacity: 1.0;
-  }
-  100% {
-    opacity: 0.1;
-  }
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #fff9e5;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -172,7 +151,4 @@ export default {
                                   supported by Chrome and Opera */
 }
 
-  #nav-container {
-    padding: 10px;
-  }
 </style>

@@ -48,9 +48,9 @@
       :hide-header-close="true"
       hide-footer 
       centered 
-      title="Game-Over"
+      title="Game Over!"
     >
-      <p class="my-4">Score = Coins: {{this.coins}} X 100 + Distance: {{this.distance}} = {{this.coins*100 + this.distance}}
+      <p class="my-4">Score = Coins: {{this.coins}} X 10 + Distance: {{this.distance}} = {{this.coins*10 + this.distance}}
       <p class="my-4">Try Again?</p>
       <b-btn class="mt-3" variant="outline-success" block @click="hideGameOverPlay">Try Again</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="hideGameOverExit">Exit</b-btn>
@@ -143,9 +143,9 @@ export default {
     init: async function() {
       
       // Enable Stats
-      this.stats = new Stats();
-      this.stats.showPanel(0);
-      document.body.appendChild(this.stats.dom);
+      // this.stats = new Stats();
+      // this.stats.showPanel(0);
+      // document.body.appendChild(this.stats.dom);
 
       let container = document.getElementById('three-container');
       let width = window.innerWidth;
@@ -178,16 +178,14 @@ export default {
       this.game.initInteractions();
     },
     animate: function() {
-      this.stats.begin();
+      // this.stats.begin();
       this.reqAnim = requestAnimationFrame(this.animate);
-      let delta = this.clock.getDelta();
       
-      // let player = this.scene.getObjectByName("player");
-      // interactions.handleMovement(delta, player, 8);
+      let delta = this.clock.getDelta();
       this.game.loop(this.scene, delta);
 
       this.renderer.render(this.scene, this.camera);
-      this.stats.end();
+      // this.stats.end();
     },
     onWindowResizeGame: function () {
       let width = this.getWindowWidth();

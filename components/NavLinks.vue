@@ -1,5 +1,5 @@
 <template>
-  <div id='nav-container' v-bind:class="{'nav-about': isAbout, 'nav-home': isHome, 'nav-project': isProject}" class='fixed-top'>
+  <div id='nav-container' v-bind:class="{'nav-about': isAbout, 'nav-home': isHome, 'nav-project': isProject, 'nav-game': isGame}" class='fixed-top'>
     <nuxt-link to="/">
       <button type="button" class='btn btn-outline-info btn-sm'>Home</button>
     </nuxt-link>
@@ -22,7 +22,8 @@ export default {
       black: 'blank',
       isHome: false,
       isAbout: false,
-      isProject: false
+      isProject: false,
+      isGame: false
     }
   },
   beforeMount: function() {
