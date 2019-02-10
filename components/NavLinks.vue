@@ -1,13 +1,10 @@
 <template>
-  <div id='nav-container' v-bind:class="{'nav-about': isAbout, 'nav-home': isHome, 'nav-game': isGame, 'nav-project': isProject}" class='fixed-top'>
+  <div id='nav-container' v-bind:class="{'nav-about': isAbout, 'nav-home': isHome, 'nav-project': isProject}" class='fixed-top'>
     <nuxt-link to="/">
       <button type="button" class='btn btn-outline-info btn-sm'>Home</button>
     </nuxt-link>
-    <nuxt-link to="/game">
-      <button type="button" class='btn btn-outline-success btn-sm'>Game</button>
-    </nuxt-link>
     <nuxt-link to="/about">
-      <button type="button" class='btn btn-outline-info btn-sm'>About</button>
+      <button type="button" class='btn btn-outline-success btn-sm'>About</button>
     </nuxt-link>
     <nuxt-link to="/projects">
       <button type="button" class='btn btn-outline-danger btn-sm'>Projects</button>
@@ -25,7 +22,6 @@ export default {
       black: 'blank',
       isHome: false,
       isAbout: false,
-      isGame: false,
       isProject: false
     }
   },
@@ -39,11 +35,6 @@ export default {
       this.isAbout = true;
       this.isHome = false;
       this.isGame = false;
-      this.isProject = false;
-    } else if(this.$route.path === '/game') {
-      this.isGame = true;
-      this.isAbout = false;
-      this.isHome = false;
       this.isProject = false;
     } else if(this.$route.path === '/projects') {
       this.isGame = false;

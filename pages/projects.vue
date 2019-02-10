@@ -4,14 +4,16 @@
     <three-scene/>
     
     <div id='main'>
-      <div class='sub-row'>
+      <div v-bind:class="{'sub-row': isDesktop, 'sub-row-mobile': !isDesktop}">
 
         <div class='card' style='width: 18rem;'>
           <img class='card-img-top' src='/game_gif.gif' width="286px" height="180px" alt='game card'>
           <div class='card-body'>
-            <h5 class='card-title'>Blocks Down</h5>
-            <p class='card-text'>A procedurally generated infinite runner.</p>
-            <a href='#' class='btn btn-primary'>Visit</a>
+            <h5 class='card-title'>Blocks Down (Beta)</h5>
+            <p class='card-text'>A procedurally generated block dodge game. Currently in Beta.</p>
+            <nuxt-link to="/game">
+              <button type="button" class='btn btn-primary btn-sm'>Visit</button>
+            </nuxt-link>
           </div>
         </div>
 
@@ -26,10 +28,10 @@
 
       </div>
 
-      <div class='sub-row'>
+      <div v-bind:class="{'sub-row': isDesktop, 'sub-row-mobile': !isDesktop}">
 
         <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/saturn_chat_gif.gif' alt='saturn chat card'>
+          <img class='card-img-top' src='/saturn_chat_gif.gif' width="286px" height="180px" alt='saturn-chat card'>
           <div class='card-body'>
             <h5 class='card-title'>Saturn Chat</h5>
             <p class='card-text'>A 3D chat-room experience</p>
@@ -38,34 +40,14 @@
         </div>
 
         <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
+          <img class='card-img-top' src='/stream_graph_gif.gif' width="286px" height="180px" alt='stream-graph card'>
           <div class='card-body'>
             <h5 class='card-title'>Some Project</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
-            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
+            <p class='card-text'>Coursework to display data as a stream graph.</p>
+            <a href='https://sad-einstein-467d18.netlify.com/' class='btn btn-primary'>Visit</a>
           </div>
         </div>
 
-      </div>
-
-      <div class='sub-row'>
-        <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
-          <div class='card-body'>
-            <h5 class='card-title'>Some Project</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
-            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
-          </div>
-        </div>
-
-        <div class='card' style='width: 18rem;'>
-          <img class='card-img-top' src='/cyclone_card.png' alt='cyclone card'>
-          <div class='card-body'>
-            <h5 class='card-title'>Some Project</h5>
-            <p class='card-text'>E-Commerce site built with wordpress and woocommerce</p>
-            <a href='https://cyclonedistributorsinc.com' class='btn btn-primary'>Visit</a>
-          </div>
-        </div>
       </div>
 
     </div>
@@ -91,11 +73,13 @@ export default {
   data() {
     return {
       blank: 'blank',
-      emojiSmile: ''
+      emojiSmile: '',
+      isDesktop: false,
     }
   },
   created: function() {
-
+    console.log(this.$device.isDesktop);
+    this.$device.isDesktop ? this.isDesktop = true : this.isDesktop = false;
   },
   computed: {
     ...mapState([
@@ -128,8 +112,8 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   z-index: 2;
-  margin-top: 6%;
-  margin-bottom: 7%;
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
 .container {
@@ -140,33 +124,13 @@ export default {
   text-align: center;
 }
 
-.container h2 {
-  font-size: 32px;
-}
-
-.container h5 {
-  font-size: 20px;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #fff6d6;
-  letter-spacing: 1px;
-}
-
-.pulsate {
-  -webkit-animation: pulsate 3s ease-in-out;
-  animation: pulsate 3s ease-out;
-  -webkit-animation-iteration-count: infinite;
-  animation-iteration-count: infinite;
-  opacity: 0.1;
-}
-
 .sub-row {
+  display:flex;
+  flex-direction: row;
+  padding: 1%;
+}
+
+.sub-row-mobile {
   display:flex;
   flex-direction: column;
   padding: 1%;

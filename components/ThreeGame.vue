@@ -11,31 +11,45 @@
 
     <!-- Pop-up windows -->
     <b-modal ref="startGame" 
-      no-close-on-backdrop="true" 
-      no-close-on-esc="true" 
-      hide-header-close="true" 
-      hide-footer centered title="StartGame"
+      :no-close-on-backdrop="true"
+      :no-close-on-esc="true"
+      :hide-header-close="true"
+      hide-footer
+      centered
+      title="StartGame"
     >
       <p class="my-4">The objective of the game is to last as long as possible by keeping health above -1.</p>
       <p class="my-4">You lose health when you hit the green blocks.</p>
       <p class="my-4">The final score is determined by the number of coins collected and distance traveled.</p>
+      <p class="my-4">Controls Desktop: Move using WASD or Arrow Keys. Use space bar to speed up blocks.</p>
+      <p class="my-4">Controls Mobile: Touch anywhere on the screen to move. Use buttons to pause and speed up.</p>
       <b-btn class="mt-3" variant="outline-success" block @click="hideStartGamePlay">Start Game</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="hideStartGameExit">Exit Game</b-btn>
     </b-modal>
 
     <b-modal 
       ref="pauseGame" 
-      no-close-on-backdrop="true" 
-      no-close-on-esc="true" 
-      hide-header-close="true" 
-      hide-footer centered title="Game Paused"
+      :no-close-on-backdrop="true"
+      :no-close-on-esc="true"
+      :hide-header-close="true"
+      hide-footer
+      centered
+      title="Game Paused"
     >
       <p>The game is paused</p>
       <b-btn class="mt-3" variant="outline-success" block @click="hidePauseGamePlay">Continue Game</b-btn>
       <b-btn class="mt-3" variant="outline-danger" block @click="hidePauseGameExit">Exit Game</b-btn>
     </b-modal>
 
-    <b-modal ref="gameOver" hide-footer centered title="Game-Over">
+    <b-modal 
+      ref="gameOver"
+       :no-close-on-backdrop="true"
+      :no-close-on-esc="true"
+      :hide-header-close="true"
+      hide-footer 
+      centered 
+      title="Game-Over"
+    >
       <p class="my-4">Score = Coins: {{this.coins}} X 100 + Distance: {{this.distance}} = {{this.coins*100 + this.distance}}
       <p class="my-4">Try Again?</p>
       <b-btn class="mt-3" variant="outline-success" block @click="hideGameOverPlay">Try Again</b-btn>
@@ -255,6 +269,7 @@ export default {
     hideStartGameExit: function() {
       this.$refs.startGame.hide();
       this.pauseGame();
+      this.$router.push('/');
     },
     showPauseGame: function() {
       this.$refs.pauseGame.show();
@@ -267,6 +282,7 @@ export default {
     hidePauseGameExit: function() {
       this.$refs.pauseGame.hide();
       this.pauseGame();
+      this.$router.push('/');
     },
     showGameOver: function() {
       this.$refs.gameOver.show();
@@ -278,6 +294,7 @@ export default {
     },
     hideGameOverExit: function() {
       this.$refs.gameOver.hide();
+      this.$router.push('/');
     }
   }
 }
