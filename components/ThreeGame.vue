@@ -125,6 +125,7 @@ export default {
     window.removeEventListener('obstacle-collided', this.handleObstacleCollision, false);
     window.removeEventListener('coin-collided', this.handleObstacleCollision, false);
     window.removeEventListener('distance-update', this.handleUpdateDistance, false);
+    cancelAnimationFrame(this.reqAnim);
   },
   destroyed: function() {
     this.game.removeInteractions();
@@ -135,8 +136,7 @@ export default {
     this.renderer.domElement = null;
     this.renderer = null;
 
-    document.body.removeChild(this.stats.dom);
-    cancelAnimationFrame(this.reqAnim);
+    // document.body.removeChild(this.stats.dom);
   },
   methods: {
     // ---------------------------------------------------> Threejs Commands
