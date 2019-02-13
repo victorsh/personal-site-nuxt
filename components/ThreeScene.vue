@@ -19,6 +19,7 @@ export default {
       camera: null,
       scene: null,
       renderer: null,
+      reqAnim: null,
       clock: null,
       controls: null,
       accelerateCube: 0.01,
@@ -46,9 +47,19 @@ export default {
       this.loading = false;
       this.animate();
     });
+
+    
+  },
+  beforeDestroy: function() {
+    window.removeEventListener('resize', this.onWindowResizeMain, false);
   },
   destroyed: function() {
-    document.removeEventListener('resize', this.onWindowResize, false);
+    // Remove GL
+    this.renderer.forceContextLoss();
+    this.renderer.context = null;
+    this.renderer.domElement = null;
+    this.renderer = null;
+    cancelAnimationFrame(this.reqAnim);
   },
   methods: {
     loadTextures: async function() {
@@ -106,6 +117,9 @@ export default {
       } else if (this.$route.path === '/about') {
         geometry = new THREE.IcosahedronBufferGeometry(2, 0);
         material = new THREE.MeshPhongMaterial({color: '#1eff8b', wireframe: true});
+      } else if (this.$route.path === '/projects') {
+        geometry = new THREE.SphereBufferGeometry(5, 32, 32);
+        material = new THREE.MeshPhongMaterial({color: '#f44b42', wireframe: true});
       }
       
       let mesh = new THREE.Mesh(geometry, material);
@@ -113,12 +127,11 @@ export default {
       this.scene.add(mesh);
 
       container.appendChild(this.renderer.domElement);
-      window.addEventListener('resize', this.onWindowResize, false)
-
+      window.addEventListener('resize', this.onWindowResizeMain, false)
       // await utils.timeout(3000);
     },
     animate: function() {
-      requestAnimationFrame(this.animate);
+      this.reqAnim = requestAnimationFrame(this.animate);
       let delta = this.clock.getDelta();
       let rtObject = this.scene.getObjectByName('rotator-object');
       let pointsSystem = this.scene.getObjectByName('the-particles');
@@ -155,12 +168,13 @@ export default {
         new THREE.TextureLoader().load(url, resolve);
       })
     },
-    onWindowResize: function () {
+    onWindowResizeMain: function () {
       let width = this.getWindowWidth();
       let height = this.getWindowHeight();
       this.camera.aspect = width / height;
       this.camera.updateProjectionMatrix();
 
+      console.log('main');
       this.renderer.setSize(width, height);
     },
     getWindowWidth: function() {

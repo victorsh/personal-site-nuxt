@@ -1,0 +1,22 @@
+{
+  "short_name": "VS",
+  "name": "Victor Shahbazian",
+  "icons": [
+    {
+      "src": "/icons/apple-icon-180x180.png",
+      "type": "image/png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/icons/apple-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#FFFFFF",
+  "orientation": "any"
+}
